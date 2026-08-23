@@ -22,7 +22,7 @@ import typography from '../theme/typography';
 import spacing, { radii, shadows } from '../theme/spacing';
 import { ROUTES } from '../constants/routes';
 import { triggerHaptic } from '../utils/haptics';
-import { useAuth } from '../hooks/useAuth';
+import { usePlayer } from '../context';
 import storageService from '../services/storageService';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -61,7 +61,7 @@ const SCREEN_PAD = 24;
 
 export default function ResultsScreen({ route, navigation }) {
   const insets = useSafeAreaInsets();
-  const { refreshProfile } = useAuth();
+  const { refreshProfile } = usePlayer();
   const hasPersistedRef = useRef(false);
 
   const summary = route.params?.summary || {

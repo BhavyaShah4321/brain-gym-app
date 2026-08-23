@@ -11,7 +11,7 @@ This document provides developer guidelines for maintaining code quality, testin
    - Do NOT introduce TypeScript, `.ts`, or `.tsx` files.
 2. **Decoupled Architecture**:
    - Game logic belongs in `src/games/<category>/`.
-   - Never import React, React Native, or Firebase inside game engine files (`Generator`, `Evaluator`, `Difficulty`, `Engine`).
+   - Never import React, React Native, or storage libraries inside game engine files (`Generator`, `Evaluator`, `Difficulty`, `Engine`).
    - Game engines must remain 100% testable in pure JavaScript runtime.
 3. **Design System Adherence**:
    - Import all colors, typography, and spacing from `src/theme`.
@@ -61,9 +61,9 @@ When ready to test standalone APKs on physical Android devices:
 ## 🗺 Roadmap Phases
 
 - [x] **Phase 1**: Environment, Expo JS setup, Design System, Navigation, Initial Splash & Home UI.
-- [ ] **Phase 2-7**: Category UIs, Onboarding, and Theme Refinements.
-- [ ] **Phase 8-10**: Full Interactive Memory Drill, Task Generators, and Results Flow.
-- [ ] **Phase 11**: Local Statistics Engine and Performance Charts.
-- [ ] **Phase 12-14**: Firebase Auth & Firestore Persistence Layer.
-- [ ] **Phase 15-18**: Remaining 7 Training Faculty Engines and Polish.
-- [ ] **Phase 19-20**: EAS Build and Production APK/AAB generation.
+- [x] **Phase 2-7**: Category UIs, Onboarding, and Theme Refinements.
+- [x] **Phase 8-10**: Full Interactive Memory Drill, Task Generators, and Results Flow.
+- [x] **Phase 11**: Local Statistics Engine and Performance Charts.
+- [x] **Phase 12-14**: Local-First Architecture & AsyncStorage Persistence Layer.
+- [x] **Phase 15-18**: All 8 Training Faculty Engines + Mind Rush Arcade Suite.
+- [x] **Phase 19-20**: EAS Build and Production APK/AAB readiness.

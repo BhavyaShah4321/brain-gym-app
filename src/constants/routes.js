@@ -5,8 +5,6 @@
 export const ROUTES = {
   SPLASH: 'Splash',
   ONBOARDING: 'Onboarding',
-  LOGIN: 'Login',
-  REGISTER: 'Register',
   MAIN_TABS: 'MainTabs',
   HOME: 'Home',
   TRAINING: 'Training',

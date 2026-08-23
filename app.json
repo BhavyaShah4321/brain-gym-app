@@ -27,6 +27,9 @@
         "projectId": "99253b10-15dc-47da-90f6-b2e2ba3afb1d"
       }
     },
-    "owner": "bhavya7272s-team"
+    "owner": "bhavya7272s-team",
+    "plugins": [
+      "expo-font"
+    ]
   }
 }

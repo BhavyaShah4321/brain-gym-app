@@ -19,7 +19,7 @@ import { Ionicons } from '@expo/vector-icons';
 import typography from '../theme/typography';
 import spacing, { radii } from '../theme/spacing';
 import { triggerHaptic } from '../utils/haptics';
-import { useAuth } from '../hooks/useAuth';
+import { usePlayer } from '../context';
 
 /* ── Premium Luxury Palette ── */
 const P = {
@@ -51,16 +51,16 @@ const SCREEN_PAD = 24;
 
 export default function SettingsScreen({ navigation }) {
   const insets = useSafeAreaInsets();
-  const { userProfile, updateSettings } = useAuth();
+  const { playerProfile, updateSettings } = usePlayer();
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   useEffect(() => {
-    if (userProfile?.settings) {
-      setHapticsEnabled(userProfile.settings.haptics !== false);
-      setSoundEnabled(userProfile.settings.sound !== false);
+    if (playerProfile?.settings) {
+      setHapticsEnabled(playerProfile.settings.haptics !== false);
+      setSoundEnabled(playerProfile.settings.sound !== false);
     }
-  }, [userProfile?.settings]);
+  }, [playerProfile?.settings]);
 
   const topPad =
     Platform.OS === 'android'

@@ -1,6 +1,6 @@
 /**
  * OVERLOAD App Navigator
- * Central stack navigation configured for light theme with Firebase Auth integration
+ * Central stack navigation configured for light theme with local storage
  */
 
 import React from 'react';
@@ -11,8 +11,6 @@ import { ROUTES } from '../constants/routes';
 
 import SplashScreen from '../screens/SplashScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
-import LoginScreen from '../screens/LoginScreen';
-import RegisterScreen from '../screens/RegisterScreen';
 import AppTabs from './AppTabs';
 import CategoryDetailScreen from '../screens/CategoryDetailScreen';
 import GameScreen from '../screens/GameScreen';
@@ -62,16 +60,6 @@ export default function AppNavigator() {
         <Stack.Screen
           name={ROUTES.ONBOARDING}
           component={OnboardingScreen}
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name={ROUTES.LOGIN}
-          component={LoginScreen}
-          options={{ animation: 'slide_from_right' }}
-        />
-        <Stack.Screen
-          name={ROUTES.REGISTER}
-          component={RegisterScreen}
           options={{ animation: 'slide_from_right' }}
         />
         <Stack.Screen
