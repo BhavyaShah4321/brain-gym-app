@@ -12,7 +12,7 @@ const TASK_TEMPLATES = [
   { title: 'Respond to client status inquiry', baseImportance: 'MEDIUM', baseUrgency: 'HIGH', deadline: '30 min', impact: 'MEDIUM', blocks: false },
   { title: 'Update documentation diagrams', baseImportance: 'LOW', baseUrgency: 'LOW', deadline: 'Tomorrow', impact: 'LOW', blocks: false },
   { title: 'Renew SSL domain certificate', baseImportance: 'CRITICAL', baseUrgency: 'HIGH', deadline: '1 hour', impact: 'CRITICAL', blocks: true },
-  { title: 'Resolve user authentication bug', baseImportance: 'HIGH', baseUrgency: 'IMMEDIATE', deadline: '20 min', impact: 'HIGH', blocks: true },
+  { title: 'Resolve user permission bug', baseImportance: 'HIGH', baseUrgency: 'IMMEDIATE', deadline: '20 min', impact: 'HIGH', blocks: true },
   { title: 'Organize team archive files', baseImportance: 'LOW', baseUrgency: 'LOW', deadline: 'No deadline', impact: 'LOW', blocks: false },
   { title: 'Deploy critical hotfix patch', baseImportance: 'CRITICAL', baseUrgency: 'IMMEDIATE', deadline: '10 min', impact: 'CRITICAL', blocks: true },
   { title: 'Prepare presentation slides', baseImportance: 'MEDIUM', baseUrgency: 'MEDIUM', deadline: 'Tomorrow', impact: 'MEDIUM', blocks: false },

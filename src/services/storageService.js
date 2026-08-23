@@ -1,7 +1,7 @@
 /**
  * OVERLOAD Local-First Storage Service
  * Manages persistent local player identity, game sessions, statistics, and settings via AsyncStorage.
- * Zero network/Firebase dependency for local gameplay.
+ * 100% offline local persistence with zero network dependency.
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';

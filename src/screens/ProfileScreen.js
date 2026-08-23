@@ -19,7 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import typography from '../theme/typography';
 import spacing, { radii } from '../theme/spacing';
 import { ROUTES } from '../constants/routes';
-import { useAuth } from '../hooks/useAuth';
+import { usePlayer } from '../context';
 import { triggerHaptic } from '../utils/haptics';
 
 /* ── Premium Luxury Palette ── */
@@ -55,7 +55,7 @@ const SCREEN_PAD = 24;
 
 export default function ProfileScreen({ navigation }) {
   const insets = useSafeAreaInsets();
-  const { userProfile, playerId } = useAuth();
+  const { playerProfile, playerId } = usePlayer();
 
   const topPad =
     Platform.OS === 'android'
@@ -68,10 +68,10 @@ export default function ProfileScreen({ navigation }) {
     navigation.navigate(ROUTES.SETTINGS);
   };
 
-  // Extract real user values with clean fallback states
-  const displayName = userProfile?.displayName || 'Operator';
-  const operatorId = userProfile?.profile?.operatorId || playerId || 'OP-1001';
-  const stats = userProfile?.stats || {};
+  // Extract real player values with clean fallback states
+  const displayName = playerProfile?.displayName || 'Operator';
+  const operatorId = playerProfile?.profile?.operatorId || playerId || 'OP-1001';
+  const stats = playerProfile?.stats || {};
 
   const totalDrills = stats.totalDrills || 0;
   const cognitiveIndex = totalDrills > 0 ? `${stats.cognitiveIndex || 0}` : '0';

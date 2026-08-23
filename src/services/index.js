@@ -1,6 +1,7 @@
-export * from './firebase';
-export { default as authService } from './firebase/authService';
-export { default as userService } from './firebase/userService';
-export { default as settingsService } from './firebase/settingsService';
-export { default as gameSessionService } from './firebase/gameSessionService';
-export { default as progressService } from './firebase/progressService';
+/**
+ * OVERLOAD Services Layer - Barrel Export
+ * Local-first architecture: AsyncStorage only.
+ */
+
+export { default as statsService } from './statsService';
+export { default as storageService } from './storageService';

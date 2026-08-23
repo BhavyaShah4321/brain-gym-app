@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import typography from '../theme/typography';
 import spacing, { radii } from '../theme/spacing';
@@ -33,7 +33,9 @@ export default function CategoryCard({
   const accent = category.accentColor || P.navy;
 
   return (
-    <View
+    <TouchableOpacity
+      activeOpacity={0.75}
+      onPress={handlePress}
       style={[styles.card, style]}
       accessible
       accessibilityRole="button"
@@ -77,7 +79,7 @@ export default function CategoryCard({
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

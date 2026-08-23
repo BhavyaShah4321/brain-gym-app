@@ -1,1 +1,7 @@
-export { AuthProvider, useAuth } from './AuthContext';
+export {
+  PlayerProvider,
+  usePlayer,
+  PlayerContext,
+  AuthProvider,
+  useAuth,
+} from './PlayerContext';

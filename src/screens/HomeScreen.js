@@ -1,6 +1,6 @@
 /**
  * OVERLOAD HomeScreen
- * Premium Luxury Light Theme — Connected to Firebase Auth & Live Performance Telemetry
+ * Premium Luxury Light Theme — Connected to Local Storage & Live Performance Telemetry
  */
 
 import React, { useEffect, useState, useCallback } from 'react';
@@ -20,7 +20,7 @@ import typography from '../theme/typography';
 import spacing, { radii } from '../theme/spacing';
 import { TRAINING_CATEGORIES } from '../constants/categories';
 import { ROUTES } from '../constants/routes';
-import { useAuth } from '../hooks/useAuth';
+import { usePlayer } from '../context';
 import storageService from '../services/storageService';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -57,7 +57,7 @@ const SCREEN_PAD = 24;
 
 export default function HomeScreen({ navigation }) {
   const insets = useSafeAreaInsets();
-  const { user, userProfile, refreshProfile } = useAuth();
+  const { playerProfile, refreshProfile } = usePlayer();
   const [facultiesData, setFacultiesData] = useState({});
 
   const topPad =
@@ -89,9 +89,9 @@ export default function HomeScreen({ navigation }) {
   };
 
   // Derive real statistics with zero-state fallbacks
-  const stats = userProfile?.stats || {};
+  const stats = playerProfile?.stats || {};
   const totalDrills = stats.totalDrills || 0;
-  const displayName = userProfile?.displayName || 'Operator';
+  const displayName = playerProfile?.displayName || 'Operator';
 
   const readinessPercent = totalDrills > 0 ? (stats.readiness || 0) : 0;
   const readinessLabel = totalDrills > 0 ? `${readinessPercent}%` : 'Calibrating';

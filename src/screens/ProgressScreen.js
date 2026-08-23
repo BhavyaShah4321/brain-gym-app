@@ -1,72 +1,135 @@
 /**
  * OVERLOAD ProgressScreen
- * Clean light theme cognitive performance telemetry and trend analytics connected to Local-First storage
+ * Premium Luxury Light Theme — Cognitive performance telemetry & trend analytics
+ * Connected to Local-First storage
  */
 
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
 import {
-  ScreenContainer,
-  Header,
-  GradientCard,
-  AppCard,
-  StatCard,
-  Badge,
-  SectionHeader,
-  ProgressBar,
-} from '../components';
-import colors from '../theme/colors';
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  StatusBar,
+  ScrollView,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import typography from '../theme/typography';
-import spacing from '../theme/spacing';
-import { useAuth } from '../hooks/useAuth';
+import { radii } from '../theme/spacing';
+import { usePlayer } from '../context';
 import storageService from '../services/storageService';
 import { useFocusEffect } from '@react-navigation/native';
 
-export default function ProgressScreen({ navigation }) {
-  const { userProfile, refreshProfile } = useAuth();
+/* ── Premium Luxury Palette ── */
+const P = {
+  bg: '#FAF8F5',
+  surface: '#FFFFFF',
+  surfaceAlt: '#F5F2ED',
+  border: '#E8E4DE',
+
+  navy: '#1B2A4A',
+  navyLight: '#2C3E5A',
+  navyMuted: 'rgba(27, 42, 74, 0.06)',
+  navySoft: 'rgba(27, 42, 74, 0.10)',
+  navyBorder: 'rgba(27, 42, 74, 0.12)',
+
+  gold: '#C5A55A',
+  goldMuted: 'rgba(197, 165, 90, 0.10)',
+
+  sage: '#6B8F71',
+  sageMuted: 'rgba(107, 143, 113, 0.10)',
+
+  rose: '#C4787A',
+  roseMuted: 'rgba(196, 120, 122, 0.10)',
+
+  lavender: '#8B7EC8',
+  lavenderMuted: 'rgba(139, 126, 200, 0.10)',
+
+  cyan: '#5BA4B5',
+  cyanMuted: 'rgba(91, 164, 181, 0.10)',
+
+  text: '#1A1A2E',
+  textSec: '#6B6B7B',
+  textMuted: '#9E9EAE',
+};
+
+const SCREEN_PAD = 24;
+
+/* ── Faculty color map ── */
+const FACULTY_COLORS = {
+  memory:      { accent: P.navy,      accentBg: P.navyMuted,      icon: 'cube-outline' },
+  focus:       { accent: P.gold,      accentBg: P.goldMuted,      icon: 'eye-outline' },
+  reaction:    { accent: '#EA580C',   accentBg: 'rgba(234, 88, 12, 0.10)', icon: 'flash-outline' },
+  processing:  { accent: P.sage,      accentBg: P.sageMuted,      icon: 'speedometer-outline' },
+  decision:    { accent: P.lavender,  accentBg: P.lavenderMuted,  icon: 'git-branch-outline' },
+  spatial:     { accent: P.cyan,      accentBg: P.cyanMuted,      icon: 'navigate-outline' },
+  flexibility: { accent: P.rose,      accentBg: P.roseMuted,      icon: 'swap-horizontal-outline' },
+  logic:       { accent: '#0D9488',   accentBg: 'rgba(13, 148, 136, 0.10)', icon: 'bulb-outline' },
+};
+
+/* ── Default faculty names ── */
+const DEFAULT_FACULTIES = [
+  { id: 'memory',      name: 'Working Memory' },
+  { id: 'focus',       name: 'Focus & Attention' },
+  { id: 'reaction',    name: 'Reaction Speed' },
+  { id: 'processing',  name: 'Processing Speed' },
+  { id: 'decision',    name: 'Decision Making' },
+  { id: 'spatial',     name: 'Spatial Reasoning' },
+  { id: 'flexibility', name: 'Cognitive Flexibility' },
+  { id: 'logic',       name: 'Logic & Problem Solving' },
+];
+
+/* ── Inline StatBox ── */
+function StatBox({ value, label, icon, accent, accentBg }) {
+  return (
+    <View style={s.statBox}>
+      <View style={[s.statIconBox, { backgroundColor: accentBg }]}>
+        <Ionicons name={icon} size={18} color={accent} />
+      </View>
+      <Text style={s.statValue} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>
+        {value}
+      </Text>
+      <Text style={s.statLabel}>{label}</Text>
+    </View>
+  );
+}
+
+export default function ProgressScreen() {
+  const insets = useSafeAreaInsets();
+  const { playerProfile, refreshProfile } = usePlayer();
   const [facultiesMap, setFacultiesMap] = useState({});
   const [sessions, setSessions] = useState([]);
 
   useFocusEffect(
     useCallback(() => {
       refreshProfile();
-      storageService.getAllFaculties().then((data) => {
-        if (data) setFacultiesMap(data);
-      });
-      storageService.getGameSessions().then((data) => {
-        if (data) setSessions(data);
-      });
+      storageService.getAllFaculties().then((d) => { if (d) setFacultiesMap(d); });
+      storageService.getGameSessions().then((d) => { if (d) setSessions(d); });
     }, [refreshProfile])
   );
 
-  const stats = userProfile?.stats || {};
-  const totalDrills = sessions.length > 0 ? sessions.length : (stats.totalDrills || 0);
+  const topPad =
+    Platform.OS === 'android'
+      ? Math.max(StatusBar.currentHeight || 0, 24) + 12
+      : Math.max(insets.top, 20) + 8;
 
-  // Derive real statistics directly from actual sessions if available, or user stats
+  const bottomPad = Math.max(insets.bottom, 20) + 20;
+
+  const stats = playerProfile?.stats || {};
+  const totalDrills = sessions.length > 0 ? sessions.length : (stats.totalDrills || 0);
   const accuracy = sessions.length > 0
     ? Math.round(sessions.reduce((sum, s) => sum + (s.accuracy || 0), 0) / sessions.length)
     : (stats.averageAccuracy || 0);
-
   const latencyMs = sessions.length > 0
     ? Math.round(sessions.reduce((sum, s) => sum + (s.latency || s.responseTime || 0), 0) / sessions.length)
     : (stats.averageLatencyMs || 0);
-
   const cognitiveIndex = totalDrills > 0 ? (stats.cognitiveIndex || 0) : 0;
   const readiness = totalDrills > 0 ? (stats.readiness || 0) : 0;
   const streak = stats.currentStreak || 0;
 
-  const defaultFaculties = [
-    { id: 'memory', name: 'Working Memory', defaultScore: 82, color: colors.primary },
-    { id: 'focus', name: 'Focus & Attention', defaultScore: 74, color: colors.secondary },
-    { id: 'reaction', name: 'Reaction Speed', defaultScore: 91, color: colors.gold },
-    { id: 'processing', name: 'Processing Speed', defaultScore: 76, color: colors.accentBlue },
-    { id: 'decision', name: 'Decision Making', defaultScore: 80, color: colors.accentLavender },
-    { id: 'spatial', name: 'Spatial Reasoning', defaultScore: 70, color: colors.accentCyan },
-    { id: 'flexibility', name: 'Cognitive Flexibility', defaultScore: 75, color: '#EC4899' },
-    { id: 'logic', name: 'Logic & Problem Solving', defaultScore: 85, color: colors.success },
-  ];
-
-  const categoryScores = defaultFaculties.map((cat) => {
+  const categoryScores = DEFAULT_FACULTIES.map((cat) => {
     const liveDoc = facultiesMap[cat.id];
     let score = 0;
     if (liveDoc?.metrics?.accuracy) {
@@ -76,212 +139,505 @@ export default function ProgressScreen({ navigation }) {
     } else if (totalDrills > 0 && cat.id === 'memory' && accuracy > 0) {
       score = accuracy;
     }
-    return {
-      ...cat,
-      score,
-    };
+    const c = FACULTY_COLORS[cat.id] || { accent: P.navy, accentBg: P.navyMuted, icon: 'cube-outline' };
+    return { ...cat, score, ...c };
   });
 
   return (
-    <ScreenContainer scrollable withPadding={false}>
-      <View style={styles.container}>
-        <Header
-          title="Your Progress"
-          subtitle="ANALYTICS"
-        />
+    <View style={s.root}>
+      <StatusBar barStyle="dark-content" backgroundColor={P.bg} translucent />
 
-        {/* Intro Tagline */}
-        <View style={styles.introBox}>
-          <Text style={styles.introHeading}>Cognitive Telemetry</Text>
-          <Text style={styles.introSubheading}>
-            Track how your cognitive performance changes over time.
-          </Text>
+      <ScrollView
+        style={s.scroll}
+        contentContainerStyle={[s.scrollContent, { paddingTop: topPad, paddingHorizontal: SCREEN_PAD }]}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        {/* ── HEADER ── */}
+        <View style={s.header}>
+          <View>
+            <Text style={s.greeting}>COGNITIVE TELEMETRY</Text>
+            <Text style={s.userName}>Progress</Text>
+          </View>
         </View>
 
-        {/* Overall Index Hero Card */}
-        <GradientCard
-          colors={colors.gradients.readinessSoft}
-          style={styles.heroCard}
-          contentStyle={styles.heroContent}
+        {/* ── INTRO CARD ── */}
+        <LinearGradient
+          colors={['#F5F2ED', '#EDE9E1']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={s.introCard}
         >
-          <View style={styles.heroTop}>
-            <View>
-              <Text style={styles.heroLabel}>OVERALL COGNITIVE INDEX</Text>
-              <Text style={styles.heroScore}>
+          <View style={s.introTopRow}>
+            <View style={s.introIconBox}>
+              <Ionicons name="analytics-outline" size={24} color={P.navy} />
+            </View>
+            <View style={s.introTextCol}>
+              <Text style={s.introTitle}>
+                Track how your cognitive performance changes over time.
+              </Text>
+              <Text style={s.introDesc}>
+                Composite metrics calibrated across all your completed training drills.
+              </Text>
+            </View>
+          </View>
+
+          {/* Quick Stats Row */}
+          <View style={s.quickStats}>
+            <View style={s.quickStatItem}>
+              <Text style={s.quickStatValue}>{totalDrills > 0 ? totalDrills : '—'}</Text>
+              <Text style={s.quickStatLabel}>Sessions</Text>
+            </View>
+            <View style={s.quickStatDivider} />
+            <View style={s.quickStatItem}>
+              <Text style={s.quickStatValue}>{totalDrills > 0 ? `${accuracy}%` : '—'}</Text>
+              <Text style={s.quickStatLabel}>Accuracy</Text>
+            </View>
+            <View style={s.quickStatDivider} />
+            <View style={s.quickStatItem}>
+              <Text style={s.quickStatValue}>{totalDrills > 0 ? cognitiveIndex : '—'}</Text>
+              <Text style={s.quickStatLabel}>Index</Text>
+            </View>
+          </View>
+        </LinearGradient>
+
+        {/* ── HERO CARD: Overall Cognitive Index ── */}
+        <View style={s.heroCard}>
+          <View style={s.heroTopRow}>
+            <View style={{ flex: 1, marginRight: 12 }}>
+              <Text style={s.heroLabel}>OVERALL COGNITIVE INDEX</Text>
+              <Text style={s.heroScore}>
                 {totalDrills > 0 ? cognitiveIndex : '—'}
               </Text>
             </View>
-            <Badge
-              label={totalDrills > 0 ? `${totalDrills} ${totalDrills === 1 ? 'Drill' : 'Drills'} Calibrated` : 'Baseline Calibration'}
-              color={totalDrills > 0 ? colors.success : colors.primary}
-            />
+            <View style={s.heroBadge}>
+              <Text style={s.heroBadgeText}>
+                {totalDrills > 0
+                  ? `${totalDrills} ${totalDrills === 1 ? 'Drill' : 'Drills'} Calibrated`
+                  : 'Baseline'}
+              </Text>
+            </View>
           </View>
 
-          <Text style={styles.heroDescription}>
+          <Text style={s.heroDesc}>
             {totalDrills > 0
               ? 'Composite score indexed across memory buffer, reaction latency, and processing accuracy.'
               : 'Complete your first few training drills to unlock your personalized cognitive performance curve.'}
           </Text>
 
-          <View style={styles.heroProgress}>
-            <ProgressBar
-              progress={totalDrills > 0 ? cognitiveIndex / 1000 : 0}
-              color={colors.primary}
-              height={6}
+          {/* Progress bar */}
+          <View style={s.progressTrack}>
+            <View
+              style={[
+                s.progressFill,
+                { width: totalDrills > 0 ? `${Math.min(100, cognitiveIndex / 10)}%` : '0%' },
+              ]}
             />
           </View>
-        </GradientCard>
 
-        {/* 2x2 Telemetry Snapshot */}
-        <SectionHeader title="Performance Highlights" />
-        <View style={styles.metricsGrid}>
-          <View style={styles.metricsRow}>
-            <StatCard
+          {/* Sub-metrics row */}
+          <View style={s.subMetrics}>
+            <View style={s.subMetricItem}>
+              <Text style={s.subMetricLabel}>Readiness</Text>
+              <Text style={s.subMetricValue}>{totalDrills > 0 ? `${readiness}%` : '—'}</Text>
+            </View>
+            <View style={s.subMetricDivider} />
+            <View style={s.subMetricItem}>
+              <Text style={s.subMetricLabel}>Accuracy</Text>
+              <Text style={s.subMetricValue}>{totalDrills > 0 ? `${accuracy}%` : '—'}</Text>
+            </View>
+            <View style={s.subMetricDivider} />
+            <View style={s.subMetricItem}>
+              <Text style={s.subMetricLabel}>Latency</Text>
+              <Text style={s.subMetricValue}>{totalDrills > 0 ? `${latencyMs}ms` : '—'}</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* ── SECTION: Performance Highlights ── */}
+        <Text style={s.sectionTitle}>Performance Highlights</Text>
+        <Text style={s.sectionSubtitle}>Key telemetry from your training sessions</Text>
+
+        <View style={s.statsGrid}>
+          <View style={s.statsRow}>
+            <StatBox
               value={totalDrills > 0 ? `${readiness}%` : '—'}
               label="Readiness Score"
-              iconName="pulse-outline"
-              accentColor={colors.primary}
+              icon="pulse-outline"
+              accent={P.navy}
+              accentBg={P.navyMuted}
             />
-            <StatCard
+            <StatBox
               value={totalDrills > 0 ? `${accuracy}%` : '—'}
               label="Mean Accuracy"
-              iconName="checkmark-circle-outline"
-              accentColor={colors.success}
+              icon="checkmark-circle-outline"
+              accent={P.sage}
+              accentBg={P.sageMuted}
             />
           </View>
-          <View style={styles.metricsRow}>
-            <StatCard
-              value={`${streak} Days`}
+          <View style={s.statsRow}>
+            <StatBox
+              value={`${streak} days`}
               label="Active Streak"
-              iconName="flame-outline"
-              accentColor={colors.gold}
+              icon="flame-outline"
+              accent={P.gold}
+              accentBg={P.goldMuted}
             />
-            <StatCard
+            <StatBox
               value={totalDrills > 0 ? `${latencyMs} ms` : '—'}
               label="Mean Latency"
-              iconName="flash-outline"
-              accentColor={colors.accentLavender}
+              icon="flash-outline"
+              accent={P.rose}
+              accentBg={P.roseMuted}
             />
           </View>
         </View>
 
-        {/* Faculty Calibration Performance List */}
-        <SectionHeader
-          title="Faculty Performance"
-          subtitle="Performance index by cognitive domain"
-        />
+        {/* ── SECTION: Faculty Performance ── */}
+        <Text style={s.sectionTitle}>Faculty Performance</Text>
+        <Text style={s.sectionSubtitle}>Performance index by cognitive domain</Text>
 
-        <View style={styles.facultiesList}>
-          {categoryScores.map((cat) => (
-            <AppCard
-              key={cat.id}
-              style={styles.facultyCard}
-              contentStyle={styles.facultyContent}
-            >
-              <View style={styles.facultyRow}>
-                <Text style={styles.facultyName}>{cat.name}</Text>
-                <Text style={[styles.facultyPercent, { color: cat.color }]}>
-                  {cat.score > 0 ? `${cat.score}%` : 'Calibrating'}
-                </Text>
+        <View style={s.facultiesList}>
+          {categoryScores.map((cat) => {
+            const pct = cat.score > 0 ? cat.score : 0;
+            const status = cat.score > 0 ? `${cat.score}%` : 'Calibrating';
+
+            return (
+              <View key={cat.id} style={s.facultyCard}>
+                <View style={s.facultyRow}>
+                  <View style={s.facultyLeft}>
+                    <View style={[s.facultyIconBox, { backgroundColor: cat.accentBg }]}>
+                      <Ionicons name={cat.icon} size={18} color={cat.accent} />
+                    </View>
+                    <View style={s.facultyTextCol}>
+                      <Text style={s.facultyName}>{cat.name}</Text>
+                      <Text style={s.facultyStatus}>{status}</Text>
+                    </View>
+                  </View>
+                  <Text style={[s.facultyScore, { color: cat.accent }]}>
+                    {cat.score > 0 ? cat.score : '—'}
+                  </Text>
+                </View>
+
+                <View style={s.facultyProgressTrack}>
+                  <View
+                    style={[
+                      s.facultyProgressFill,
+                      { width: `${Math.min(100, pct)}%`, backgroundColor: cat.accent },
+                    ]}
+                  />
+                </View>
               </View>
-
-              <ProgressBar
-                progress={cat.score > 0 ? cat.score / 100 : 0}
-                color={cat.color}
-                height={6}
-              />
-            </AppCard>
-          ))}
+            );
+          })}
         </View>
-      </View>
-    </ScreenContainer>
+
+        {/* Bottom spacer for tab bar */}
+        <View style={{ height: bottomPad }} />
+      </ScrollView>
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: spacing.screenPadding,
-    paddingBottom: spacing.huge,
+const s = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: P.bg,
   },
-  introBox: {
-    paddingVertical: spacing.xs,
-    marginBottom: spacing.xs,
+  scroll: {
+    flex: 1,
   },
-  introHeading: {
-    fontSize: typography.sizes.h2,
+  scrollContent: {
+    flexGrow: 1,
+  },
+
+  /* ── Header ── */
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  greeting: {
+    fontSize: 11,
     fontWeight: typography.weights.bold,
-    color: colors.textPrimary,
-    letterSpacing: typography.letterSpacing.tight,
-    marginBottom: spacing.xxs,
+    color: P.textSec,
+    letterSpacing: 1.5,
+    marginBottom: 4,
   },
-  introSubheading: {
-    fontSize: typography.sizes.body,
-    color: colors.textSecondary,
-    lineHeight: typography.lineHeights.body,
+  userName: {
+    fontSize: 30,
+    fontWeight: typography.weights.bold,
+    color: P.text,
+    letterSpacing: -0.5,
   },
+
+  /* ── Intro Card ── */
+  introCard: {
+    borderRadius: radii.card,
+    borderWidth: 1,
+    borderColor: P.border,
+    padding: 20,
+    marginBottom: 28,
+    overflow: 'hidden',
+  },
+  introTopRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+  },
+  introIconBox: {
+    width: 48,
+    height: 48,
+    borderRadius: radii.sm,
+    backgroundColor: P.navyMuted,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
+  },
+  introTextCol: {
+    flex: 1,
+  },
+  introTitle: {
+    fontSize: 17,
+    fontWeight: typography.weights.bold,
+    color: P.text,
+    letterSpacing: -0.3,
+    marginBottom: 4,
+  },
+  introDesc: {
+    fontSize: 13,
+    color: P.textSec,
+    lineHeight: 20,
+  },
+  quickStats: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: P.navyBorder,
+  },
+  quickStatItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  quickStatDivider: {
+    width: 1,
+    height: 22,
+    backgroundColor: P.navyBorder,
+  },
+  quickStatValue: {
+    fontSize: 20,
+    fontWeight: typography.weights.bold,
+    color: P.navy,
+    marginBottom: 2,
+  },
+  quickStatLabel: {
+    fontSize: 12,
+    color: P.textSec,
+  },
+
+  /* ── Hero Card ── */
   heroCard: {
-    marginVertical: spacing.xs,
+    backgroundColor: P.surface,
+    borderRadius: radii.card,
+    borderWidth: 1,
+    borderColor: P.border,
+    padding: 20,
+    marginBottom: 28,
   },
-  heroContent: {
-    padding: spacing.cardPadding,
-  },
-  heroTop: {
+  heroTopRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: spacing.xs,
+    marginBottom: 10,
   },
   heroLabel: {
-    fontSize: typography.sizes.micro,
+    fontSize: 11,
     fontWeight: typography.weights.bold,
-    color: colors.textSecondary,
-    letterSpacing: typography.letterSpacing.caps,
-    marginBottom: 2,
+    color: P.textSec,
+    letterSpacing: 1.5,
+    marginBottom: 4,
   },
   heroScore: {
-    fontSize: typography.sizes.scoreNumber,
+    fontSize: 46,
     fontWeight: typography.weights.bold,
-    color: colors.primary,
-    letterSpacing: typography.letterSpacing.tight,
+    color: P.navy,
+    letterSpacing: -1,
+    lineHeight: 50,
   },
-  heroDescription: {
-    fontSize: typography.sizes.body,
-    color: colors.textSecondary,
-    lineHeight: typography.lineHeights.body,
-    marginVertical: spacing.xs,
+  heroBadge: {
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: radii.pill,
+    backgroundColor: P.navyMuted,
+    borderWidth: 1,
+    borderColor: P.navyBorder,
+    flexShrink: 0,
   },
-  heroProgress: {
-    marginTop: spacing.md,
+  heroBadgeText: {
+    fontSize: 12,
+    fontWeight: typography.weights.bold,
+    color: P.navy,
+    letterSpacing: 0.3,
   },
-  metricsGrid: {
-    gap: spacing.sm,
+  heroDesc: {
+    fontSize: 14,
+    color: P.textSec,
+    lineHeight: 21,
+    marginBottom: 14,
   },
-  metricsRow: {
+  progressTrack: {
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: P.surfaceAlt,
+    overflow: 'hidden',
+    marginBottom: 18,
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 3,
+    backgroundColor: P.gold,
+  },
+  subMetrics: {
     flexDirection: 'row',
-    gap: spacing.sm,
+    alignItems: 'center',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: P.navyBorder,
   },
+  subMetricItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  subMetricDivider: {
+    width: 1,
+    height: 22,
+    backgroundColor: P.navyBorder,
+  },
+  subMetricLabel: {
+    fontSize: 12,
+    color: P.textSec,
+    marginBottom: 3,
+  },
+  subMetricValue: {
+    fontSize: 15,
+    fontWeight: typography.weights.bold,
+    color: P.text,
+  },
+
+  /* ── Section Headers ── */
+  sectionTitle: {
+    fontSize: 21,
+    fontWeight: typography.weights.bold,
+    color: P.text,
+    letterSpacing: -0.3,
+    marginBottom: 4,
+  },
+  sectionSubtitle: {
+    fontSize: 13,
+    color: P.textSec,
+    marginBottom: 14,
+  },
+
+  /* ── Stats Grid (Performance Highlights) ── */
+  statsGrid: {
+    gap: 12,
+    marginBottom: 28,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  statBox: {
+    flex: 1,
+    backgroundColor: P.surface,
+    borderRadius: radii.card,
+    borderWidth: 1,
+    borderColor: P.border,
+    padding: 16,
+    minHeight: 110,
+  },
+  statIconBox: {
+    width: 38,
+    height: 38,
+    borderRadius: radii.sm,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  statValue: {
+    fontSize: 24,
+    fontWeight: typography.weights.bold,
+    color: P.text,
+    letterSpacing: -0.4,
+    marginBottom: 2,
+  },
+  statLabel: {
+    fontSize: 12,
+    fontWeight: typography.weights.medium,
+    color: P.textSec,
+  },
+
+  /* ── Faculty Performance Cards ── */
   facultiesList: {
-    gap: spacing.xs,
+    gap: 10,
+    marginBottom: 8,
   },
   facultyCard: {
-    marginVertical: spacing.xxs,
-  },
-  facultyContent: {
-    padding: spacing.md,
+    backgroundColor: P.surface,
+    borderRadius: radii.card,
+    borderWidth: 1,
+    borderColor: P.border,
+    padding: 16,
   },
   facultyRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.sm,
+    marginBottom: 12,
+  },
+  facultyLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  facultyIconBox: {
+    width: 38,
+    height: 38,
+    borderRadius: radii.sm,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  facultyTextCol: {
+    flex: 1,
   },
   facultyName: {
-    fontSize: typography.sizes.bodyLarge,
-    fontWeight: typography.weights.semibold,
-    color: colors.textPrimary,
-  },
-  facultyPercent: {
-    fontSize: typography.sizes.bodyLarge,
+    fontSize: 15,
     fontWeight: typography.weights.bold,
+    color: P.text,
+    marginBottom: 2,
+  },
+  facultyStatus: {
+    fontSize: 12,
+    color: P.textSec,
+  },
+  facultyScore: {
+    fontSize: 22,
+    fontWeight: typography.weights.bold,
+    letterSpacing: -0.4,
+    marginLeft: 12,
+    flexShrink: 0,
+  },
+  facultyProgressTrack: {
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: P.surfaceAlt,
+    overflow: 'hidden',
+  },
+  facultyProgressFill: {
+    height: '100%',
+    borderRadius: 3,
   },
 });

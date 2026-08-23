@@ -127,7 +127,7 @@ Storage is centralized in [`src/services/storageService.js`](file:///d:/BCA/Proj
 ---
 
 ## 7. Quality Assurance & Offline Isolation
-- **100% Offline-First**: Zero required internet connectivity or authentication. Firebase remains optional for future cloud sync.
+- **100% Offline-First**: Zero required internet connectivity or authentication. All gameplay, progression, and settings persist locally via AsyncStorage.
 - **Strict Invariants**: All procedural challenge generators validate tasks before presentation.
 - **Timer and Lifecycle Safety**: All `setTimeout`, `setInterval`, and animation loops are tracked and cleaned up on unmount.
 - **Android Dev Bundle**: Clean Metro bundling with 0 errors across 1,232 modules.

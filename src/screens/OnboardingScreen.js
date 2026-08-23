@@ -21,7 +21,6 @@ import typography from '../theme/typography';
 import spacing, { radii } from '../theme/spacing';
 import { ROUTES } from '../constants/routes';
 import { triggerHaptic } from '../utils/haptics';
-import { useAuth } from '../hooks/useAuth';
 
 /* ── Premium Luxury Palette ── */
 const palette = {
@@ -93,7 +92,6 @@ const SLIDES = [
 
 export default function OnboardingScreen({ navigation }) {
   const insets = useSafeAreaInsets();
-  const { user } = useAuth();
   const [currentIndex, setCurrentIndex] = useState(0);
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const slideAnim = useRef(new Animated.Value(0)).current;
