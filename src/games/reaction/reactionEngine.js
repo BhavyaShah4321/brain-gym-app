@@ -4,10 +4,10 @@
  * false start detection, combo tracking, and adaptive difficulty.
  */
 
-import { REACTION_MODES, SESSION_TYPES, REACTION_DIFFICULTY_PARAMS } from './reactionConstants';
-import { generateReactionTask } from './reactionGenerator';
-import { evaluateReactionResponse } from './reactionEvaluator';
-import { calculateNextReactionDifficulty } from './reactionDifficulty';
+import { REACTION_MODES, SESSION_TYPES, REACTION_DIFFICULTY_PARAMS } from './reactionConstants.js';
+import { generateReactionTask } from './reactionGenerator.js';
+import { evaluateReactionResponse } from './reactionEvaluator.js';
+import { calculateNextReactionDifficulty } from './reactionDifficulty.js';
 
 export class ReactionEngine {
   constructor({

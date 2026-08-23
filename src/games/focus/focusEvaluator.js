@@ -4,7 +4,7 @@
  * Zero UI coupling.
  */
 
-import { FOCUS_MODES, getComboMultiplier } from './focusConstants';
+import { FOCUS_MODES, getComboMultiplier } from './focusConstants.js';
 
 /**
  * Evaluates a user response against an active Focus task.

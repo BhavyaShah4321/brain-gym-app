@@ -3,7 +3,7 @@
  * Deterministic rolling-window performance progression for Working Memory.
  */
 
-import { DEFAULT_DIFFICULTY_PARAMS } from './memoryConstants';
+import { DEFAULT_DIFFICULTY_PARAMS } from './memoryConstants.js';
 
 /**
  * Calculates the next difficulty span based on streak and rolling performance window.

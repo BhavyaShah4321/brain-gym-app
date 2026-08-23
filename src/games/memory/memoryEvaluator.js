@@ -4,7 +4,7 @@
  * Zero UI coupling.
  */
 
-import { MEMORY_MODES, getMemoryComboMultiplier } from './memoryConstants';
+import { MEMORY_MODES, getMemoryComboMultiplier } from './memoryConstants.js';
 
 /**
  * Evaluates a user response against an active Working Memory task.

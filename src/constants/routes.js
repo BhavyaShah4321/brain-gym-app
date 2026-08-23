@@ -16,6 +16,12 @@ export const ROUTES = {
   GAME: 'Game',
   FOCUS_GAME: 'FocusGame',
   REACTION_GAME: 'ReactionGame',
+  PROCESSING_GAME: 'ProcessingGame',
+  DECISION_GAME: 'DecisionGame',
+  SPATIAL_GAME: 'SpatialGame',
+  FLEXIBILITY_GAME: 'FlexibilityGame',
+  LOGIC_GAME: 'LogicGame',
+  MIND_RUSH_GAME: 'MindRushGame',
   RESULTS: 'Results',
   SETTINGS: 'Settings',
 };

@@ -1,9 +1,10 @@
 /**
- * Cognitive Flexibility Engine Module
+ * OVERLOAD - Cognitive Flexibility Faculty Index
  */
-export const FLEXIBILITY_MODES = {
-  RULE_SWITCHING: 'rule_switching',
-  CHANGING_SORTING_RULES: 'changing_sorting_rules',
-  TASK_SWITCHING: 'task_switching',
-  CONFLICTING_RULES: 'conflicting_rules',
-};
+
+export * from './flexibilityConstants.js';
+export * from './flexibilityGenerator.js';
+export * from './flexibilityEvaluator.js';
+export * from './flexibilityDifficulty.js';
+export * from './flexibilityEngine.js';
+export { FlexibilityEngine as default } from './flexibilityEngine.js';

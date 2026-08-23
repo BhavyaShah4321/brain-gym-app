@@ -11,7 +11,7 @@ import {
   MEMORY_MODES,
   MEMORY_SHAPES,
   MEMORY_COLORS,
-} from './memoryConstants';
+} from './memoryConstants.js';
 
 function shuffle(array) {
   const arr = [...array];

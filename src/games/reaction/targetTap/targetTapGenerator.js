@@ -9,7 +9,7 @@ import {
   TIMEOUT_WINDOWS_MS,
   REACTION_SHAPES,
   REACTION_COLORS,
-} from '../reactionConstants';
+} from '../reactionConstants.js';
 
 function pickRandom(array) {
   return array[Math.floor(Math.random() * array.length)];

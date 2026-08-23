@@ -3,7 +3,7 @@
  * Deterministic rolling-window performance progression for reaction speed.
  */
 
-import { REACTION_DIFFICULTY_PARAMS } from './reactionConstants';
+import { REACTION_DIFFICULTY_PARAMS } from './reactionConstants.js';
 
 /**
  * Calculates next reaction difficulty level based on rolling performance metrics.

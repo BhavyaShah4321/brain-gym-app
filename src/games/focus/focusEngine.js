@@ -4,10 +4,10 @@
  * and adaptive difficulty progression for selective attention and visual tracking.
  */
 
-import { FOCUS_MODES, SESSION_TYPES, FOCUS_DIFFICULTY_PARAMS } from './focusConstants';
-import { generateFocusTask } from './focusGenerator';
-import { evaluateFocusResponse } from './focusEvaluator';
-import { calculateNextFocusDifficulty } from './focusDifficulty';
+import { FOCUS_MODES, SESSION_TYPES, FOCUS_DIFFICULTY_PARAMS } from './focusConstants.js';
+import { generateFocusTask } from './focusGenerator.js';
+import { evaluateFocusResponse } from './focusEvaluator.js';
+import { calculateNextFocusDifficulty } from './focusDifficulty.js';
 
 export class FocusEngine {
   constructor({

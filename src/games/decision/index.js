@@ -1,9 +1,10 @@
 /**
- * Decision Making Engine Module
+ * OVERLOAD - Decision Making Faculty Index
  */
-export const DECISION_MODES = {
-  FAST_CHOICE: 'fast_choice',
-  RULE_BASED_DECISIONS: 'rule_based_decisions',
-  RISK_REWARD_DECISIONS: 'risk_reward_decisions',
-  CHANGING_CONDITIONS: 'changing_conditions',
-};
+
+export * from './decisionConstants.js';
+export * from './decisionGenerator.js';
+export * from './decisionEvaluator.js';
+export * from './decisionDifficulty.js';
+export * from './decisionEngine.js';
+export { DecisionEngine as default } from './decisionEngine.js';

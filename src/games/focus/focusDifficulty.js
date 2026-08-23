@@ -3,7 +3,7 @@
  * Deterministic rolling-window performance difficulty adaptation.
  */
 
-import { FOCUS_DIFFICULTY_PARAMS } from './focusConstants';
+import { FOCUS_DIFFICULTY_PARAMS } from './focusConstants.js';
 
 /**
  * Calculates the next difficulty level based on recent performance window.

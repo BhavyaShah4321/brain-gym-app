@@ -309,6 +309,8 @@ export default function HomeScreen({ navigation }) {
             const liveLevel = facultyRecord?.level || cat.level || 1;
             const liveMetric = cat.id === 'reaction'
               ? (facultyRecord?.metrics?.averageLatency ? `${facultyRecord.metrics.averageLatency} ms` : cat.defaultMetric)
+              : (cat.id === 'processing' || cat.id === 'decision')
+              ? (facultyRecord?.metrics?.accuracy ? `${facultyRecord.metrics.accuracy}%` : cat.defaultMetric)
               : (facultyRecord?.metrics?.peakSpan
                   ? `${facultyRecord.metrics.peakSpan} items`
                   : (facultyRecord?.metrics?.accuracy ? `${facultyRecord.metrics.accuracy}%` : cat.defaultMetric));

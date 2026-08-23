@@ -1,161 +1,126 @@
-# OVERLOAD — Cognitive Performance Platform
+# OVERLOAD — Mobile Cognitive Performance Platform
 
-**OVERLOAD** is a premium cognitive-training mobile application built with React Native and Expo (pure JavaScript) powered by a robust Firebase Authentication and Cloud Firestore data foundation. Designed with a clean, calm, luxury editorial visual identity, OVERLOAD empowers continuous, unbounded cognitive training across 8 distinct faculties with dynamic task generation and adaptive difficulty.
+**OVERLOAD** is a premium, local-first mobile cognitive training application built with **React Native and Expo (pure JavaScript)**. Designed with a luxury editorial aesthetic, OVERLOAD delivers 27 scientifically grounded, adaptive cognitive drills organized across 8 core cognitive faculties and a high-energy **Mind Rush** arcade suite.
 
 ---
 
 ## 🛠 Technology Stack
 
 - **Framework**: [React Native](https://reactnative.dev/) with [Expo](https://expo.dev/) (SDK 57)
-- **Language**: Pure JavaScript (`.js`, `.json` only — strictly no TypeScript)
-- **Backend & Persistence**: Firebase v10+ (Firebase Authentication & Cloud Firestore) with AsyncStorage session persistence
+- **Language**: Pure JavaScript (`.js` only — strictly 0 TypeScript)
+- **Persistence**: Local-first offline storage via `@react-native-async-storage/async-storage`
 - **Navigation**: `@react-navigation/native`, `@react-navigation/native-stack`, and `@react-navigation/bottom-tabs`
-- **Design System**: Light luxury editorial tokens (`#FAF8F5` / `#F7F8FC` canvas, `#FFFFFF` surfaces, `#1B2A4A` navy, `#C5A55A` gold, `#6B8F71` sage, `#C4787A` rose)
-- **State & Architecture**: Functional React components, Centralized `AuthContext`, and completely decoupled game engines
+- **Design System**: Luxury editorial light theme (`#FAF8F5` canvas, `#FFFFFF` surfaces, `#1B2A4A` navy, `#C5A55A` gold, `#6B8F71` sage, `#10B981` emerald, `#EF4444` rose)
+- **Sensory & Haptics**: `expo-haptics` tactile micro-impulses
 
 ---
 
-## 🔥 Firebase Setup Guide
+## 🧠 Cognitive Faculties & Game Modes (27 Total)
 
-Follow these steps to connect your Firebase project:
+### 1. Working Memory (4 Modes)
+- **Sequence Recall**: Reconstruct sequential active positions across a 3x3 matrix.
+- **Grid Memory**: Retain simultaneous spatial coordinate layouts.
+- **Object Recall**: Feature recognition and target discrimination amidst visual distractors.
+- **Order Recall**: Temporal sequence reconstruction from shuffled items.
 
-### 1. Create a Firebase Project
-1. Go to the [Firebase Console](https://console.firebase.google.com/).
-2. Click **Add project** and name it (e.g. `overload-cognitive`).
-3. Disable or enable Google Analytics according to your preference and create the project.
+### 2. Focus & Attention (2 Modes)
+- **Target Search**: Rapid visual feature search under visual noise.
+- **Visual Tracking**: Continuous tracking of moving and swapping target tokens.
 
-### 2. Enable Authentication
-1. In the Firebase Console, navigate to **Build > Authentication**.
-2. Click **Get Started**.
-3. Under the **Sign-in method** tab, select **Email/Password**.
-4. Enable the **Email/Password** toggle and click **Save**.
+### 3. Reaction Speed (3 Modes)
+- **Target Tap**: Millisecond visual onset detection and motor execution.
+- **Rapid Choice**: High-speed visual discrimination and choice selection.
+- **Direction Reaction**: Directional cue stimulus-to-motor translation.
 
-### 3. Create Cloud Firestore Database
-1. In the Firebase Console, navigate to **Build > Firestore Database**.
-2. Click **Create database**.
-3. Choose a database location close to your users (e.g. `nam5` or `asia-south1`).
-4. Start in **Production mode** (security rules will be deployed).
+### 4. Processing Speed (3 Modes)
+- **Symbol Match**: High-speed comparison of dual symbol sets.
+- **Number Scan**: Fast numerical matrix search.
+- **Pattern Complete**: Sequence rule induction and missing terminal prediction.
 
-### 4. Deploy Firestore Security Rules
-Copy the contents of [`firestore.rules`](file:///d:/BCA/Project/fullStack/brain-gym-app/firestore.rules) into the **Firestore Database > Rules** tab in the Firebase Console and click **Publish**:
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+### 5. Decision Making (3 Modes)
+- **Priority Sort**: Multi-attribute task triage under deadlines, impact, and urgency.
+- **Best Choice**: Constrained multi-criteria optimization.
+- **Rule Switch**: Dynamic conditional decision rule adaptation.
 
-      match /{allSubcollections=**} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
-      }
-    }
-  }
-}
+### 6. Spatial Reasoning (3 Modes)
+- **Mental Rotation**: Angular geometric orientation matching.
+- **Spatial Navigation**: Shortest-path navigation across grid labyrinths.
+- **Mirror Map**: Axis reflection and coordinate mapping.
+
+### 7. Cognitive Flexibility (3 Modes)
+- **Sort Shift**: Mental set shifting across changing visual dimensions.
+- **Pattern Shift**: Mid-sequence transformation detection and rule adaptation.
+- **Dual Rule**: Branching execution based on contextual flags.
+
+### 8. Logic & Reasoning (3 Modes)
+- **Deduction Grid**: Variable elimination and relationship deduction.
+- **Sequence Logic**: Mathematical sequence rule discovery.
+- **Constraint Solver**: Multi-constraint satisfaction.
+
+### 9. Mind Rush Arcade (3 Modes)
+- **Blast Logic**: Fast multi-rule target detonation.
+- **Chain Reaction**: Sequential network root planning and staggered propagation.
+- **Boss Breaker**: 5-phase cyber-boss shield combat.
+
+---
+
+## 🚀 Running the Application
+
+### 1. Install Dependencies
+```bash
+npm install
 ```
 
-### 5. Register Web/App Client & Configure Environment Variables
-1. In **Project Settings > General**, under *Your apps*, click the **Web icon (`</>`)** to register a web app.
-2. Copy the `firebaseConfig` keys.
-3. In the root of this project, create a `.env` file from `.env.example`:
-   ```bash
-   cp .env.example .env
-   ```
-4. Fill in your environment variables:
-   ```ini
-   EXPO_PUBLIC_FIREBASE_API_KEY=AIzaSy...
-   EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN=overload-cognitive.firebaseapp.com
-   EXPO_PUBLIC_FIREBASE_PROJECT_ID=overload-cognitive
-   EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET=overload-cognitive.appspot.com
-   EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=1234567890
-   EXPO_PUBLIC_FIREBASE_APP_ID=1:1234567890:web:...
-   ```
+### 2. Start Expo Development Server
+```bash
+npm start
+# or
+npx expo start
+```
+
+### 3. Run on Android Device / Emulator
+```bash
+npm run android
+```
+
+### 4. Verify Android Build
+```bash
+npx expo export --platform android --dev
+```
 
 ---
 
-## 📂 Project Architecture
+## 📂 Architecture Overview
 
 ```
 brain-gym-app/
-├── App.js                      # Root application entry & providers
-├── app.json                    # Expo configuration & app identity
-├── firestore.rules             # Cloud Firestore security rules
-├── .env.example                # Environment variables template
-├── package.json                # Dependencies and scripts
-└── src/
-    ├── components/             # Reusable design system UI components
-    │   ├── AppButton.js        # Multi-variant tactile button
-    │   ├── AppCard.js          # Surface container card
-    │   ├── GradientCard.js     # Subtle tinted gradient card
-    │   ├── Badge.js            # Status/metric pill
-    │   ├── CategoryCard.js     # Training category module card
-    │   ├── Header.js           # Screen headers
-    │   ├── ScreenContainer.js  # Safe-area aware screen container
-    │   ├── StatCard.js         # Metric display card
-    │   └── index.js
-    ├── constants/              # Global constants & definitions
-    │   ├── categories.js       # 8 core cognitive faculties
-    │   └── routes.js           # Navigation route names
-    ├── context/                # Context providers (AuthContext)
-    ├── games/                  # Isolated, decoupled training engines
-    │   └── memory/             # Working memory (engine, generator, evaluator, difficulty)
-    ├── hooks/                  # Custom hooks (useAuth)
-    ├── navigation/             # Navigation stacks & tab bar
-    │   ├── AppNavigator.js     # Stack navigator
-    │   └── AppTabs.js          # Bottom tab navigation
-    ├── screens/                # UI Screens
-    │   ├── SplashScreen.js     # Typography-driven light splash
-    │   ├── OnboardingScreen.js # Full-bleed interactive intro
-    │   ├── LoginScreen.js      # Firebase email/password login
-    │   ├── RegisterScreen.js   # Firebase account creation
-    │   ├── HomeScreen.js       # Live performance telemetry dashboard
-    │   ├── TrainingScreen.js   # Core & Advanced cognitive catalog
-    │   ├── CategoryDetailScreen.js # Faculty dashboard & modes
-    │   ├── GameScreen.js       # Visually centered interactive game host
-    │   ├── ResultsScreen.js    # Post-round analytics & persistence
-    │   ├── ProgressScreen.js   # Longitudinal cognitive analytics
-    │   ├── ProfileScreen.js    # Operator profile & account sync
-    │   └── SettingsScreen.js   # Sensory & system preferences
-    ├── services/               # Firebase Services Layer
-    │   └── firebase/
-    │       ├── firebaseConfig.js     # Singleton initialization & persistence
-    │       ├── authService.js        # Auth operations & error formatting
-    │       ├── userService.js        # User document management
-    │       ├── settingsService.js    # User preferences synchronization
-    │       ├── gameSessionService.js # Drill session recording
-    │       └── progressService.js    # Aggregates, faculties & streaks
-    ├── theme/                  # Centralized design system
-    │   ├── colors.js           # Curated color tokens
-    │   ├── spacing.js          # Radii, spacing, shadows
-    │   ├── typography.js       # Font weights, scale, letter spacing
-    │   └── theme.js
-    └── utils/
-        └── performance/        # Cognitive index & streak calculators
-            ├── cognitiveIndex.js     # Deterministic performance algorithm
-            └── streakCalculator.js   # Calendar-day streak evaluation
+├── App.js                      # Root application entry
+├── src/
+│   ├── components/             # Design system components
+│   ├── constants/              # Categories & route definitions
+│   ├── games/                  # 9 decoupled cognitive game engines
+│   │   ├── memory/             # Working Memory engine
+│   │   ├── focus/              # Focus & Attention engine
+│   │   ├── reaction/           # Reaction Speed engine
+│   │   ├── processing/         # Processing Speed engine
+│   │   ├── decision/           # Decision Making engine
+│   │   ├── spatial/            # Spatial Reasoning engine
+│   │   ├── flexibility/        # Cognitive Flexibility engine
+│   │   ├── logic/              # Logic & Reasoning engine
+│   │   └── mindRush/           # Mind Rush Arcade suite
+│   ├── navigation/             # AppNavigator & Bottom Tabs
+│   ├── screens/                # All application screens
+│   ├── services/               # storageService.js (AsyncStorage layer)
+│   ├── theme/                  # Colors, typography, spacing
+│   └── utils/                  # Haptics, performance metrics, streak
+└── docs/
+    └── FINAL_PRODUCT_ARCHITECTURE.md
 ```
 
 ---
 
-## 🚀 How to Run on a Physical Android Phone
+## 🔒 Local-First Privacy & Offline Operation
 
-### Prerequisites
-1. Install **Node.js** (LTS) and **npm** on your computer.
-2. Install the **Expo Go** app from the Google Play Store on your Android phone.
-
-### Steps to Run
-1. Start the Expo development server:
-   ```bash
-   npm start
-   ```
-2. A QR code will appear in your terminal.
-3. Open the **Expo Go** app on your Android device and tap **"Scan QR code"**.
-4. Scan the terminal QR code.
-   - *Note*: Ensure your computer and Android phone are connected to the same Wi-Fi network (or use `npx expo start --tunnel`).
-
----
-
-## 🧠 Data Architecture & Firestore Schema
-
-- **`users/{uid}`** — Root user profile, operator ID, global statistics (cognitive index, total drills, active streaks, average latency, accuracy), and user settings.
-- **`users/{uid}/sessions/{sessionId}`** — Detailed telemetry for every completed training session (score, accuracy, latency, span, timestamp).
-- **`users/{uid}/faculties/{facultyId}`** — Per-faculty performance statistics, calibration levels, and rolling averages.
+- OVERLOAD is **100% offline-first**.
+- All game sessions, telemetry, personal best scores, daily streaks, and cognitive indices are persisted securely on the device via `AsyncStorage`.
+- No mandatory login, account creation, or internet connection is required for normal gameplay.

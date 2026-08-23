@@ -1,9 +1,10 @@
 /**
- * Spatial Reasoning Engine Module
+ * OVERLOAD - Spatial Reasoning Faculty Index
  */
-export const SPATIAL_MODES = {
-  MENTAL_ROTATION: 'mental_rotation',
-  POSITION_MATCHING: 'position_matching',
-  SPATIAL_RELATIONSHIPS: 'spatial_relationships',
-  VISUAL_PATH_TASKS: 'visual_path_tasks',
-};
+
+export * from './spatialConstants.js';
+export * from './spatialGenerator.js';
+export * from './spatialEvaluator.js';
+export * from './spatialDifficulty.js';
+export * from './spatialEngine.js';
+export { SpatialEngine as default } from './spatialEngine.js';

@@ -79,6 +79,8 @@ export default function CategoryDetailScreen({ route, navigation }) {
   const liveLevel = facultyData?.level || category.level || 1;
   const liveMetric = category.id === 'reaction'
     ? (facultyData?.metrics?.averageLatency ? `${facultyData.metrics.averageLatency} ms` : category.defaultMetric)
+    : category.id === 'processing'
+    ? (facultyData?.metrics?.accuracy ? `${facultyData.metrics.accuracy}%` : category.defaultMetric)
     : (facultyData?.metrics?.peakSpan
         ? `${facultyData.metrics.peakSpan} items`
         : (facultyData?.metrics?.accuracy ? `${facultyData.metrics.accuracy}%` : category.defaultMetric));
@@ -103,6 +105,36 @@ export default function CategoryDetailScreen({ route, navigation }) {
       });
     } else if (category.id === 'reaction') {
       navigation.navigate(ROUTES.REACTION_GAME, {
+        categoryId: category.id,
+        mode: mode.id,
+      });
+    } else if (category.id === 'processing') {
+      navigation.navigate(ROUTES.PROCESSING_GAME, {
+        categoryId: category.id,
+        mode: mode.id,
+      });
+    } else if (category.id === 'decision') {
+      navigation.navigate(ROUTES.DECISION_GAME, {
+        categoryId: category.id,
+        mode: mode.id,
+      });
+    } else if (category.id === 'spatial') {
+      navigation.navigate(ROUTES.SPATIAL_GAME, {
+        categoryId: category.id,
+        mode: mode.id,
+      });
+    } else if (category.id === 'flexibility') {
+      navigation.navigate(ROUTES.FLEXIBILITY_GAME, {
+        categoryId: category.id,
+        mode: mode.id,
+      });
+    } else if (category.id === 'logic') {
+      navigation.navigate(ROUTES.LOGIC_GAME, {
+        categoryId: category.id,
+        mode: mode.id,
+      });
+    } else if (category.id === 'mind_rush') {
+      navigation.navigate(ROUTES.MIND_RUSH_GAME, {
         categoryId: category.id,
         mode: mode.id,
       });

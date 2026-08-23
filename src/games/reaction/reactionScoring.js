@@ -3,7 +3,7 @@
  * Deterministic calculation of points, reflex bonuses, speed curves, and combo multipliers.
  */
 
-import { getReactionComboMultiplier } from './reactionConstants';
+import { getReactionComboMultiplier } from './reactionConstants.js';
 
 /**
  * Calculates deterministic points awarded or deducted for a reaction evaluation.

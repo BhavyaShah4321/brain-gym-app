@@ -2,9 +2,9 @@
  * OVERLOAD - Focus Training Module Index
  */
 
-export * from './focusConstants';
-export * from './focusGenerator';
-export * from './focusEvaluator';
-export * from './focusDifficulty';
-export * from './focusEngine';
-export { FocusEngine as default } from './focusEngine';
+export * from './focusConstants.js';
+export * from './focusGenerator.js';
+export * from './focusEvaluator.js';
+export * from './focusDifficulty.js';
+export * from './focusEngine.js';
+export { FocusEngine as default } from './focusEngine.js';
