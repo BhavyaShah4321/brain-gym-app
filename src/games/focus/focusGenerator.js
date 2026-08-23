@@ -11,7 +11,7 @@ import {
   TRACKING_LEVEL_CONFIG,
   STIMULI_COLORS,
   STIMULI_SHAPES,
-} from './focusConstants';
+} from './focusConstants.js';
 
 function pickRandom(array) {
   return array[Math.floor(Math.random() * array.length)];

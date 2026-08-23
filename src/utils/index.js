@@ -1,2 +1,2 @@
 export * from './timeUtils';
-export { default as triggerHaptic } from './haptics';
+export { triggerHaptic, triggerHaptic as default } from './haptics';

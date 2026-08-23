@@ -22,6 +22,7 @@ import { TRAINING_CATEGORIES } from '../constants/categories';
 import { ROUTES } from '../constants/routes';
 import storageService from '../services/storageService';
 import { useFocusEffect } from '@react-navigation/native';
+import { triggerHaptic } from '../utils/haptics';
 
 /* ── Premium Luxury Palette ── */
 const P = {
@@ -79,6 +80,7 @@ export default function TrainingScreen({ navigation }) {
   );
 
   const handleCategoryPress = (category) => {
+    triggerHaptic('light');
     navigation.navigate(ROUTES.CATEGORY_DETAIL, { categoryId: category.id });
   };
 
@@ -148,9 +150,13 @@ export default function TrainingScreen({ navigation }) {
           {coreCategories.map((category) => {
             const fac = facultiesData[category.id];
             const liveLevel = fac?.level || category.level || 1;
-            const liveMetric = fac?.metrics?.peakSpan
-              ? `${fac.metrics.peakSpan} items`
-              : (fac?.metrics?.accuracy ? `${fac.metrics.accuracy}%` : category.defaultMetric);
+            const liveMetric = category.id === 'reaction'
+              ? (fac?.metrics?.averageLatency ? `${fac.metrics.averageLatency} ms` : category.defaultMetric)
+              : category.id === 'processing'
+              ? (fac?.metrics?.accuracy ? `${fac.metrics.accuracy}%` : category.defaultMetric)
+              : (fac?.metrics?.peakSpan
+                  ? `${fac.metrics.peakSpan} items`
+                  : (fac?.metrics?.accuracy ? `${fac.metrics.accuracy}%` : category.defaultMetric));
 
             return (
               <TouchableOpacity
@@ -219,7 +225,9 @@ export default function TrainingScreen({ navigation }) {
           {advancedCategories.map((category) => {
             const fac = facultiesData[category.id];
             const liveLevel = fac?.level || category.level || 1;
-            const liveMetric = fac?.metrics?.peakSpan
+            const liveMetric = (category.id === 'decision' || category.id === 'spatial' || category.id === 'flexibility' || category.id === 'logic')
+              ? (fac?.metrics?.accuracy ? `${fac.metrics.accuracy}%` : category.defaultMetric)
+              : fac?.metrics?.peakSpan
               ? `${fac.metrics.peakSpan} items`
               : (fac?.metrics?.accuracy ? `${fac.metrics.accuracy}%` : category.defaultMetric);
 
@@ -277,6 +285,95 @@ export default function TrainingScreen({ navigation }) {
               </TouchableOpacity>
             );
           })}
+        </View>
+
+        {/* ── MIND RUSH ARCADE ── */}
+        <View style={{ marginTop: 32 }}>
+          <Text style={styles.sectionTitle}>Mind Rush Arcade</Text>
+          <Text style={styles.sectionSubtitle}>
+            Fast-paced cognitive combat & explosive challenges
+          </Text>
+        </View>
+        <View style={styles.categoriesList}>
+          {[
+            {
+              id: 'blast_logic',
+              name: 'Blast Logic',
+              tagline: 'Target & blast matching cognitive criteria',
+              icon: 'flash-outline',
+              accentColor: '#EA580C',
+              badge: 'ARCADE',
+            },
+            {
+              id: 'chain_reaction',
+              name: 'Chain Reaction',
+              tagline: 'Trigger cascading explosive node chains',
+              icon: 'git-network-outline',
+              accentColor: '#0284C7',
+              badge: 'COMBO',
+            },
+            {
+              id: 'boss_breaker',
+              name: 'Boss Breaker',
+              tagline: 'Dismantle cybernetic boss shields',
+              icon: 'hardware-chip-outline',
+              accentColor: '#8B5CF6',
+              badge: 'BOSS BATTLE',
+            },
+          ].map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              activeOpacity={0.75}
+              onPress={() => {
+                triggerHaptic('medium');
+                navigation.navigate(ROUTES.MIND_RUSH_GAME, {
+                  mode: item.id,
+                });
+              }}
+              style={styles.categoryCard}
+              accessibilityLabel={`${item.name}, Mind Rush Arcade`}
+            >
+              <View style={styles.catRow}>
+                <View
+                  style={[
+                    styles.catIconBox,
+                    { backgroundColor: `${item.accentColor}14` },
+                  ]}
+                >
+                  <Ionicons name={item.icon} size={22} color={item.accentColor} />
+                </View>
+                <View style={styles.catTextCol}>
+                  <View style={styles.catTitleRow}>
+                    <Text style={styles.catName} numberOfLines={1}>
+                      {item.name}
+                    </Text>
+                    <Ionicons name="chevron-forward" size={16} color={P.textMuted} />
+                  </View>
+                  <Text style={styles.catDesc} numberOfLines={1}>
+                    {item.tagline}
+                  </Text>
+                  <View style={styles.catMetaRow}>
+                    <View
+                      style={[
+                        styles.catLevelBadge,
+                        { backgroundColor: `${item.accentColor}14` },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.catLevelText,
+                          { color: item.accentColor },
+                        ]}
+                      >
+                        {item.badge}
+                      </Text>
+                    </View>
+                    <Text style={styles.catMetric}>Quick Play</Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
         </View>
 
         {/* Bottom spacer for tab bar */}

@@ -3,7 +3,7 @@
  * Evaluates decision speed, target discrimination accuracy, and mistakes.
  */
 
-import { REACTION_MODES } from '../reactionConstants';
+import { REACTION_MODES } from '../reactionConstants.js';
 
 export function evaluateRapidChoiceResponse({
   task,

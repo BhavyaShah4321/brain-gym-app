@@ -18,6 +18,12 @@ import CategoryDetailScreen from '../screens/CategoryDetailScreen';
 import GameScreen from '../screens/GameScreen';
 import FocusGameScreen from '../screens/FocusGameScreen';
 import ReactionGameScreen from '../screens/ReactionGameScreen';
+import ProcessingGameScreen from '../screens/ProcessingGameScreen';
+import DecisionGameScreen from '../screens/DecisionGameScreen';
+import SpatialGameScreen from '../screens/SpatialGameScreen';
+import FlexibilityGameScreen from '../screens/FlexibilityGameScreen';
+import LogicGameScreen from '../screens/LogicGameScreen';
+import MindRushGameScreen from '../screens/MindRushGameScreen';
 import ResultsScreen from '../screens/ResultsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
@@ -91,6 +97,36 @@ export default function AppNavigator() {
         <Stack.Screen
           name={ROUTES.REACTION_GAME}
           component={ReactionGameScreen}
+          options={{ animation: 'slide_from_bottom' }}
+        />
+        <Stack.Screen
+          name={ROUTES.PROCESSING_GAME}
+          component={ProcessingGameScreen}
+          options={{ animation: 'slide_from_bottom' }}
+        />
+        <Stack.Screen
+          name={ROUTES.DECISION_GAME}
+          component={DecisionGameScreen}
+          options={{ animation: 'slide_from_bottom' }}
+        />
+        <Stack.Screen
+          name={ROUTES.SPATIAL_GAME}
+          component={SpatialGameScreen}
+          options={{ animation: 'slide_from_bottom' }}
+        />
+        <Stack.Screen
+          name={ROUTES.FLEXIBILITY_GAME}
+          component={FlexibilityGameScreen}
+          options={{ animation: 'slide_from_bottom' }}
+        />
+        <Stack.Screen
+          name={ROUTES.LOGIC_GAME}
+          component={LogicGameScreen}
+          options={{ animation: 'slide_from_bottom' }}
+        />
+        <Stack.Screen
+          name={ROUTES.MIND_RUSH_GAME}
+          component={MindRushGameScreen}
           options={{ animation: 'slide_from_bottom' }}
         />
         <Stack.Screen

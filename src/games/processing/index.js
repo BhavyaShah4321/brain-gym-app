@@ -1,9 +1,10 @@
 /**
- * Processing Speed Engine Module
+ * OVERLOAD - Processing Speed Faculty Index
  */
-export const PROCESSING_MODES = {
-  RAPID_COMPARISON: 'rapid_comparison',
-  SYMBOL_MATCHING: 'symbol_matching',
-  NUMBER_COMPARISON: 'number_comparison',
-  VISUAL_CLASSIFICATION: 'visual_classification',
-};
+
+export * from './processingConstants.js';
+export * from './processingGenerator.js';
+export * from './processingEvaluator.js';
+export * from './processingDifficulty.js';
+export * from './processingEngine.js';
+export { ProcessingEngine as default } from './processingEngine.js';

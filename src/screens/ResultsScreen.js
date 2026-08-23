@@ -13,16 +13,19 @@ import {
   Platform,
   StatusBar,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import typography from '../theme/typography';
-import spacing, { radii } from '../theme/spacing';
+import spacing, { radii, shadows } from '../theme/spacing';
 import { ROUTES } from '../constants/routes';
 import { triggerHaptic } from '../utils/haptics';
 import { useAuth } from '../hooks/useAuth';
 import storageService from '../services/storageService';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 /* ── Premium Luxury Palette ── */
 const P = {
@@ -74,14 +77,68 @@ export default function ResultsScreen({ route, navigation }) {
 
   const isReaction = summary.facultyId === 'reaction' || summary.gameType === 'reaction';
   const isFocus = summary.facultyId === 'focus' || summary.gameType === 'focus';
+  const isProcessing = summary.facultyId === 'processing' || summary.gameType === 'processing';
+  const isDecision = summary.facultyId === 'decision' || summary.gameType === 'decision';
+  const isSpatial = summary.facultyId === 'spatial' || summary.gameType === 'spatial';
+  const isFlexibility = summary.facultyId === 'flexibility' || summary.gameType === 'flexibility';
+  const isLogic = summary.facultyId === 'logic' || summary.gameType === 'logic';
+  const isMindRush = summary.facultyId === 'mind-rush' || summary.gameType === 'mind-rush';
 
-  const facultyTitle = isReaction
+  const facultyTitle = isMindRush
+    ? 'MIND RUSH ARCADE'
+    : isLogic
+    ? 'LOGIC & REASONING'
+    : isFlexibility
+    ? 'COGNITIVE FLEXIBILITY'
+    : isSpatial
+    ? 'SPATIAL REASONING'
+    : isDecision
+    ? 'DECISION MAKING'
+    : isProcessing
+    ? 'PROCESSING SPEED'
+    : isReaction
     ? 'REACTION SPEED'
     : isFocus
     ? 'FOCUS & ATTENTION'
     : 'WORKING MEMORY';
 
-  const modeTitle = isReaction
+  const modeTitle = isMindRush
+    ? summary.mode === 'chain_reaction'
+      ? 'Chain Reaction'
+      : summary.mode === 'boss_breaker'
+      ? 'Boss Breaker'
+      : 'Blast Logic'
+    : isLogic
+    ? summary.mode === 'sequence_logic'
+      ? 'Sequence Logic'
+      : summary.mode === 'constraint_solver'
+      ? 'Constraint Solver'
+      : 'Deduction Grid'
+    : isFlexibility
+    ? summary.mode === 'pattern_shift'
+      ? 'Pattern Shift'
+      : summary.mode === 'dual_rule'
+      ? 'Dual Rule'
+      : 'Sort Shift'
+    : isSpatial
+    ? summary.mode === 'spatial_navigation'
+      ? 'Spatial Navigation'
+      : summary.mode === 'mirror_map'
+      ? 'Mirror Map'
+      : 'Mental Rotation'
+    : isDecision
+    ? summary.mode === 'best_choice'
+      ? 'Best Choice'
+      : summary.mode === 'rule_switch'
+      ? 'Rule Switch'
+      : 'Priority Sort'
+    : isProcessing
+    ? summary.mode === 'number_scan'
+      ? 'Number Scan'
+      : summary.mode === 'pattern_complete'
+      ? 'Pattern Complete'
+      : 'Symbol Match'
+    : isReaction
     ? summary.mode === 'direction_reaction'
       ? 'Direction Reaction'
       : summary.mode === 'rapid_choice'
@@ -110,7 +167,9 @@ export default function ResultsScreen({ route, navigation }) {
     calculatedScore = Math.round(baseScore + speedBonus + spanMultiplier);
   }
 
+  const accuracy = summary.averageAccuracy || 0;
   const isPersonalBest = calculatedScore >= 800;
+  const accuracyStatus = accuracy >= 90 ? 'Excellent' : accuracy >= 75 ? 'Good' : accuracy >= 50 ? 'Fair' : 'Developing';
 
   // Persist session to local AsyncStorage
   useEffect(() => {
@@ -118,12 +177,12 @@ export default function ResultsScreen({ route, navigation }) {
     hasPersistedRef.current = true;
 
     const sessionPayload = {
-      gameType: isReaction ? 'reaction' : isFocus ? 'focus' : 'memory-span',
-      category: isReaction ? 'reaction' : isFocus ? 'focus' : 'working-memory',
-      facultyId: isReaction ? 'reaction' : isFocus ? 'focus' : 'memory',
-      modeId: summary.mode || (isReaction ? 'target_tap' : isFocus ? 'target_search' : 'sequence_recall'),
+      gameType: isMindRush ? 'mind-rush' : isLogic ? 'logic' : isFlexibility ? 'flexibility' : isSpatial ? 'spatial' : isDecision ? 'decision' : isProcessing ? 'processing' : isReaction ? 'reaction' : isFocus ? 'focus' : 'memory-span',
+      category: isMindRush ? 'mind_rush' : isLogic ? 'logic' : isFlexibility ? 'flexibility' : isSpatial ? 'spatial' : isDecision ? 'decision' : isProcessing ? 'processing' : isReaction ? 'reaction' : isFocus ? 'focus' : 'working-memory',
+      facultyId: isMindRush ? 'mind-rush' : isLogic ? 'logic' : isFlexibility ? 'flexibility' : isSpatial ? 'spatial' : isDecision ? 'decision' : isProcessing ? 'processing' : isReaction ? 'reaction' : isFocus ? 'focus' : 'memory',
+      modeId: summary.mode || (isMindRush ? 'blast_logic' : isLogic ? 'deduction_grid' : isFlexibility ? 'sort_shift' : isSpatial ? 'mental_rotation' : isDecision ? 'priority_sort' : isProcessing ? 'symbol_match' : isReaction ? 'target_tap' : isFocus ? 'target_search' : 'sequence_recall'),
       score: calculatedScore,
-      accuracy: summary.averageAccuracy || 0,
+      accuracy: accuracy,
       latency: summary.averageResponseTimeMs || 0,
       responseTime: summary.averageResponseTimeMs || 0,
       span: summary.currentSpan || summary.peakLevel || 3,
@@ -131,8 +190,8 @@ export default function ResultsScreen({ route, navigation }) {
       totalRounds: summary.totalRounds || 1,
       durationSeconds: elapsedSeconds,
       difficulty: 'adaptive',
-      result: (summary.averageAccuracy || 0) >= 80 ? 'success' : 'completed',
-      isPerfect: (summary.averageAccuracy || 0) === 100 && (summary.falseStartCount || 0) === 0,
+      result: accuracy >= 80 ? 'success' : 'completed',
+      isPerfect: accuracy === 100 && (summary.falseStartCount || 0) === 0,
     };
 
     storageService.saveGameSession(sessionPayload)
@@ -142,7 +201,7 @@ export default function ResultsScreen({ route, navigation }) {
       .catch((err) => {
         console.warn('Local session save failed:', err);
       });
-  }, [calculatedScore, summary, elapsedSeconds, isReaction, isFocus, refreshProfile]);
+  }, [calculatedScore, summary, elapsedSeconds, isMindRush, isLogic, isFlexibility, isSpatial, isDecision, isProcessing, isReaction, isFocus, refreshProfile]);
 
   const topPad =
     Platform.OS === 'android'
@@ -153,7 +212,37 @@ export default function ResultsScreen({ route, navigation }) {
 
   const handleTrainAgain = () => {
     triggerHaptic('medium');
-    if (isReaction) {
+    if (isMindRush) {
+      navigation.replace(ROUTES.MIND_RUSH_GAME, {
+        categoryId: 'mind_rush',
+        mode: summary.mode || 'blast_logic',
+      });
+    } else if (isLogic) {
+      navigation.replace(ROUTES.LOGIC_GAME, {
+        categoryId: 'logic',
+        mode: summary.mode || 'deduction_grid',
+      });
+    } else if (isFlexibility) {
+      navigation.replace(ROUTES.FLEXIBILITY_GAME, {
+        categoryId: 'flexibility',
+        mode: summary.mode || 'sort_shift',
+      });
+    } else if (isSpatial) {
+      navigation.replace(ROUTES.SPATIAL_GAME, {
+        categoryId: 'spatial',
+        mode: summary.mode || 'mental_rotation',
+      });
+    } else if (isDecision) {
+      navigation.replace(ROUTES.DECISION_GAME, {
+        categoryId: 'decision',
+        mode: summary.mode || 'priority_sort',
+      });
+    } else if (isProcessing) {
+      navigation.replace(ROUTES.PROCESSING_GAME, {
+        categoryId: 'processing',
+        mode: summary.mode || 'symbol_match',
+      });
+    } else if (isReaction) {
       navigation.replace(ROUTES.REACTION_GAME, {
         categoryId: 'reaction',
         mode: summary.mode || 'target_tap',
@@ -202,53 +291,100 @@ export default function ResultsScreen({ route, navigation }) {
           colors={['#F5F2ED', '#EDE9E1']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={styles.scoreCard}
+          style={styles.heroCard}
         >
-          <View style={styles.scoreTopRow}>
-            <View style={styles.badgeRow}>
-              <View style={[styles.badge, { backgroundColor: P.navyMuted, borderColor: P.navyBorder }]}>
-                <Text style={[styles.badgeText, { color: P.navy }]}>{modeTitle}</Text>
+          <View style={styles.heroTopRow}>
+            <View>
+              <Text style={styles.heroLabel}>PERFORMANCE INDEX</Text>
+              <Text style={styles.heroScore}>{calculatedScore}</Text>
+            </View>
+            <View style={styles.heroRightCol}>
+              <View style={styles.heroBadgeRow}>
+                <View style={[styles.heroBadge, { backgroundColor: P.navyMuted, borderColor: P.navyBorder }]}>
+                  <Text style={[styles.heroBadgeText, { color: P.navy }]} numberOfLines={1}>
+                    {modeTitle}
+                  </Text>
+                </View>
               </View>
               {isPersonalBest ? (
-                <View style={[styles.badge, { backgroundColor: P.goldMuted, borderColor: P.goldBorder }]}>
-                  <Text style={[styles.badgeText, { color: P.gold }]}>New Best</Text>
+                <View style={[styles.heroBadge, { backgroundColor: P.goldMuted, borderColor: P.goldBorder, marginTop: 6 }]}>
+                  <Ionicons name="trophy-outline" size={12} color={P.gold} style={{ marginRight: 4 }} />
+                  <Text style={[styles.heroBadgeText, { color: P.gold }]}>New Best</Text>
                 </View>
-              ) : (
-                <View style={[styles.badge, { backgroundColor: P.surfaceAlt, borderColor: P.border }]}>
-                  <Text style={[styles.badgeText, { color: P.textSec }]}>Calibrated</Text>
-                </View>
-              )}
+              ) : null}
             </View>
           </View>
 
-          <View style={styles.scoreCenter}>
-            <Text style={styles.scoreLabel}>PERFORMANCE INDEX</Text>
-            <Text style={styles.scoreValue}>{calculatedScore}</Text>
-            <Text style={styles.scoreDesc}>
-              {isReaction
-                ? 'Composite score calibrated across raw neural reaction velocity and decision latency'
-                : isFocus
-                ? 'Composite score calibrated across target precision, distractor filtering, and latency'
-                : 'Composite score based on retention capacity and neural latency'}
-            </Text>
+          <Text style={styles.heroDesc}>
+            {isReaction
+              ? 'Composite score calibrated across neural reaction velocity and decision latency.'
+              : isFocus
+              ? 'Composite score calibrated across target precision, distractor filtering, and latency.'
+              : 'Composite score based on retention capacity and neural processing speed.'}
+          </Text>
+
+          {/* Accuracy Progress Bar */}
+          <View style={styles.accuracySection}>
+            <View style={styles.accuracyHeader}>
+              <Text style={styles.accuracyLabel}>Accuracy</Text>
+              <View style={styles.accuracyValueRow}>
+                <Text style={styles.accuracyValue}>{accuracy}%</Text>
+                <View style={[styles.accuracyStatusBadge, {
+                  backgroundColor: accuracy >= 90 ? P.sageMuted : accuracy >= 75 ? P.goldMuted : P.roseMuted,
+                }]}>
+                  <Text style={[styles.accuracyStatusText, {
+                    color: accuracy >= 90 ? P.sage : accuracy >= 75 ? P.gold : P.rose,
+                  }]}>{accuracyStatus}</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.progressTrack}>
+              <View
+                style={[
+                  styles.progressFill,
+                  {
+                    width: `${Math.min(100, accuracy)}%`,
+                    backgroundColor: accuracy >= 90 ? P.sage : accuracy >= 75 ? P.gold : P.rose,
+                  },
+                ]}
+              />
+            </View>
+          </View>
+
+          {/* Sub-metrics row */}
+          <View style={styles.subMetrics}>
+            <View style={styles.subMetricItem}>
+              <Text style={styles.subMetricLabel}>Rounds</Text>
+              <Text style={styles.subMetricValue}>{summary.totalRounds || 0}</Text>
+            </View>
+            <View style={styles.subMetricDivider} />
+            <View style={styles.subMetricItem}>
+              <Text style={styles.subMetricLabel}>Avg Latency</Text>
+              <Text style={styles.subMetricValue}>{summary.averageResponseTimeMs || 0}ms</Text>
+            </View>
+            <View style={styles.subMetricDivider} />
+            <View style={styles.subMetricItem}>
+              <Text style={styles.subMetricLabel}>Duration</Text>
+              <Text style={styles.subMetricValue}>{elapsedSeconds}s</Text>
+            </View>
           </View>
         </LinearGradient>
 
-        {/* ── TELEMETRY GRID ── */}
-        <Text style={styles.sectionTitle}>Session Telemetry</Text>
+        {/* ── DETAILED TELEMETRY ── */}
+        <Text style={styles.sectionTitle}>Detailed Telemetry</Text>
         <View style={styles.statsGrid}>
           {isReaction ? (
             <>
               <View style={styles.statsRow}>
                 <StatBox
-                  value={`${summary.averageResponseTimeMs || 0} ms`}
+                  value={`${summary.averageResponseTimeMs || 0}ms`}
                   label="Mean Latency"
                   icon="flash-outline"
                   accent={P.gold}
                   accentBg={P.goldMuted}
                 />
                 <StatBox
-                  value={summary.bestReactionTimeMs ? `${summary.bestReactionTimeMs} ms` : '—'}
+                  value={summary.bestReactionTimeMs ? `${summary.bestReactionTimeMs}ms` : '—'}
                   label="Best Reflex"
                   icon="speedometer-outline"
                   accent={P.navy}
@@ -257,7 +393,7 @@ export default function ResultsScreen({ route, navigation }) {
               </View>
               <View style={styles.statsRow}>
                 <StatBox
-                  value={`${summary.averageAccuracy || 0}%`}
+                  value={`${accuracy}%`}
                   label="Accuracy"
                   icon="checkmark-circle-outline"
                   accent={P.sage}
@@ -265,7 +401,7 @@ export default function ResultsScreen({ route, navigation }) {
                 />
                 <StatBox
                   value={`${summary.totalRounds || 0}`}
-                  label="Rounds Completed"
+                  label="Rounds Done"
                   icon="repeat-outline"
                   accent={P.rose}
                   accentBg={P.roseMuted}
@@ -276,8 +412,8 @@ export default function ResultsScreen({ route, navigation }) {
             <>
               <View style={styles.statsRow}>
                 <StatBox
-                  value={`${summary.averageAccuracy || 0}%`}
-                  label="Mean Accuracy"
+                  value={`${accuracy}%`}
+                  label="Accuracy"
                   icon="checkmark-circle-outline"
                   accent={P.sage}
                   accentBg={P.sageMuted}
@@ -292,7 +428,7 @@ export default function ResultsScreen({ route, navigation }) {
               </View>
               <View style={styles.statsRow}>
                 <StatBox
-                  value={isFocus ? `${summary.bestCombo || 0}x` : `${summary.currentSpan || 3} items`}
+                  value={isFocus ? `${summary.bestCombo || 0}x` : `${summary.currentSpan || 3}`}
                   label={isFocus ? 'Best Combo' : 'Peak Span'}
                   icon={isFocus ? 'flame-outline' : 'cube-outline'}
                   accent={P.navy}
@@ -300,7 +436,7 @@ export default function ResultsScreen({ route, navigation }) {
                 />
                 <StatBox
                   value={`${summary.totalRounds || 0}`}
-                  label="Rounds Completed"
+                  label="Rounds Done"
                   icon="repeat-outline"
                   accent={P.rose}
                   accentBg={P.roseMuted}
@@ -323,15 +459,15 @@ export default function ResultsScreen({ route, navigation }) {
                 : 'Neural motor trigger latency was consistent. Focus on relaxing before stimulus onset to avoid early anticipatory tension.'
               : isFocus
               ? summary.mode === 'visual_tracking'
-                ? (summary.averageAccuracy || 0) >= 90
+                ? (accuracy >= 90
                   ? 'High dynamic spatial tracking fidelity maintained across complex multi-object trajectories.'
-                  : 'Continuous visual tracking was consistent with slight loss during rapid path crossings. Continue tracking drills to sharpen spatial focus.'
-                : (summary.averageAccuracy || 0) >= 90
+                  : 'Continuous visual tracking was consistent with slight loss during rapid path crossings. Continue tracking drills to sharpen spatial focus.')
+                : (accuracy >= 90
                 ? 'High selective attention maintained under competing visual noise. Target discrimination velocity remained swift.'
-                : 'Attention throughput was steady, with minor distractor capture during higher density tiers. Continue training to suppress interference.'
-              : (summary.averageAccuracy || 0) >= 90
-              ? 'Working-memory encoding maintained high fidelity under progressive sequence demands. Your retention span is trending upward.'
-              : 'Response latency was stable, with minor decay during higher span complexity tiers. Keep training to improve consistency.'}
+                : 'Attention throughput was steady, with minor distractor capture during higher density tiers. Continue training to suppress interference.')
+              : accuracy >= 90
+              ? 'Cognitive encoding maintained high fidelity under progressive demands. Your performance capacity is trending upward.'
+              : 'Response latency was stable, with minor decay during higher complexity tiers. Keep training to improve consistency.'}
           </Text>
         </View>
 
@@ -360,6 +496,7 @@ export default function ResultsScreen({ route, navigation }) {
             style={styles.secondaryBtn}
             accessibilityLabel="Back to Training"
           >
+            <Ionicons name="grid-outline" size={17} color={P.navy} style={{ marginRight: 8 }} />
             <Text style={styles.secondaryBtnText}>Back to Training</Text>
           </TouchableOpacity>
         </View>
@@ -378,7 +515,12 @@ function StatBox({ value, label, icon, accent, accentBg }) {
       <View style={[styles.statIconBox, { backgroundColor: accentBg }]}>
         <Ionicons name={icon} size={18} color={accent} />
       </View>
-      <Text style={styles.statValue} numberOfLines={1} adjustsFontSizeToFit>
+      <Text
+        style={styles.statValue}
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        minimumFontScale={0.7}
+      >
         {value}
       </Text>
       <Text style={styles.statLabel} numberOfLines={1}>
@@ -424,8 +566,8 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
 
-  /* ── Score Card ── */
-  scoreCard: {
+  /* ── Hero Card ── */
+  heroCard: {
     borderRadius: radii.card,
     borderWidth: 1,
     borderColor: P.border,
@@ -433,46 +575,124 @@ const styles = StyleSheet.create({
     marginBottom: 28,
     overflow: 'hidden',
   },
-  scoreTopRow: {
-    marginBottom: 16,
-  },
-  badgeRow: {
+  heroTopRow: {
     flexDirection: 'row',
-    gap: 8,
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 10,
   },
-  badge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: radii.pill,
-    borderWidth: 1,
-  },
-  badgeText: {
-    fontSize: 11,
-    fontWeight: typography.weights.bold,
-  },
-  scoreCenter: {
-    alignItems: 'center',
-  },
-  scoreLabel: {
+  heroLabel: {
     fontSize: 11,
     fontWeight: typography.weights.bold,
     color: P.textSec,
     letterSpacing: 1.5,
     marginBottom: 4,
   },
-  scoreValue: {
-    fontSize: 52,
+  heroScore: {
+    fontSize: 46,
     fontWeight: typography.weights.bold,
     color: P.navy,
     letterSpacing: -1,
-    lineHeight: 56,
-    marginBottom: 6,
+    lineHeight: 50,
   },
-  scoreDesc: {
-    fontSize: 13,
+  heroRightCol: {
+    alignItems: 'flex-end',
+  },
+  heroBadgeRow: {
+    flexDirection: 'row',
+    gap: 6,
+  },
+  heroBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: radii.pill,
+    borderWidth: 1,
+  },
+  heroBadgeText: {
+    fontSize: 11,
+    fontWeight: typography.weights.bold,
+  },
+  heroDesc: {
+    fontSize: 14,
     color: P.textSec,
-    textAlign: 'center',
-    lineHeight: 20,
+    lineHeight: 21,
+    marginBottom: 16,
+  },
+
+  /* ── Accuracy Section inside hero ── */
+  accuracySection: {
+    marginBottom: 16,
+  },
+  accuracyHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  accuracyLabel: {
+    fontSize: 13,
+    fontWeight: typography.weights.medium,
+    color: P.textSec,
+  },
+  accuracyValueRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  accuracyValue: {
+    fontSize: 18,
+    fontWeight: typography.weights.bold,
+    color: P.text,
+    letterSpacing: -0.3,
+  },
+  accuracyStatusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: radii.pill,
+  },
+  accuracyStatusText: {
+    fontSize: 11,
+    fontWeight: typography.weights.bold,
+  },
+  progressTrack: {
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: P.surfaceAlt,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 4,
+  },
+
+  /* ── Sub-metrics ── */
+  subMetrics: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: P.navyBorder,
+  },
+  subMetricItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  subMetricDivider: {
+    width: 1,
+    height: 22,
+    backgroundColor: P.navyBorder,
+  },
+  subMetricLabel: {
+    fontSize: 11,
+    color: P.textMuted,
+    marginBottom: 3,
+  },
+  subMetricValue: {
+    fontSize: 15,
+    fontWeight: typography.weights.bold,
+    color: P.text,
   },
 
   /* ── Section Headers ── */
@@ -501,6 +721,7 @@ const styles = StyleSheet.create({
     borderColor: P.border,
     padding: 16,
     minHeight: 110,
+    ...shadows.subtle,
   },
   statIconBox: {
     width: 38,
@@ -511,11 +732,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   statValue: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: typography.weights.bold,
     color: P.text,
     letterSpacing: -0.4,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   statLabel: {
     fontSize: 12,
@@ -534,6 +755,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 12,
+    ...shadows.subtle,
   },
   insightIconBox: {
     width: 36,
@@ -580,12 +802,14 @@ const styles = StyleSheet.create({
     backgroundColor: P.surface,
     borderWidth: 1,
     borderColor: P.border,
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    ...shadows.subtle,
   },
   secondaryBtnText: {
     fontSize: 16,
     fontWeight: typography.weights.semibold,
-    color: P.text,
+    color: P.navy,
   },
 });

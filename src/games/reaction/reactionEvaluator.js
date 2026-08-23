@@ -3,11 +3,11 @@
  * Pure evaluation function delegating to mode evaluators and applying scoring formulas.
  */
 
-import { REACTION_MODES } from './reactionConstants';
-import { evaluateTargetTapResponse } from './targetTap/targetTapEvaluator';
-import { evaluateRapidChoiceResponse } from './rapidChoice/rapidChoiceEvaluator';
-import { evaluateDirectionReactionResponse } from './directionReaction/directionReactionEvaluator';
-import { calculateReactionScore } from './reactionScoring';
+import { REACTION_MODES } from './reactionConstants.js';
+import { evaluateTargetTapResponse } from './targetTap/targetTapEvaluator.js';
+import { evaluateRapidChoiceResponse } from './rapidChoice/rapidChoiceEvaluator.js';
+import { evaluateDirectionReactionResponse } from './directionReaction/directionReactionEvaluator.js';
+import { calculateReactionScore } from './reactionScoring.js';
 
 /**
  * Evaluates a reaction response across Target Tap, Rapid Choice, or Direction Reaction.

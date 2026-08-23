@@ -3,7 +3,7 @@
  * Evaluates motor latency, false starts, and timeout conditions for Target Tap.
  */
 
-import { REACTION_MODES } from '../reactionConstants';
+import { REACTION_MODES } from '../reactionConstants.js';
 
 export function evaluateTargetTapResponse({
   task,

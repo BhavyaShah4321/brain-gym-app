@@ -5,10 +5,10 @@
  * Zero UI / persistence coupling.
  */
 
-import { generateMemoryTask } from './memoryGenerator';
-import { evaluateMemoryResponse } from './memoryEvaluator';
-import { calculateNextDifficulty } from './memoryDifficulty';
-import { MEMORY_MODES, SESSION_TYPES, DEFAULT_DIFFICULTY_PARAMS } from './memoryConstants';
+import { generateMemoryTask } from './memoryGenerator.js';
+import { evaluateMemoryResponse } from './memoryEvaluator.js';
+import { calculateNextDifficulty } from './memoryDifficulty.js';
+import { MEMORY_MODES, SESSION_TYPES, DEFAULT_DIFFICULTY_PARAMS } from './memoryConstants.js';
 
 export class MemoryEngine {
   constructor({

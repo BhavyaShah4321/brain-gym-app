@@ -1,9 +1,10 @@
 /**
- * Logic & Reasoning Engine Module
+ * OVERLOAD - Logic & Reasoning Faculty Index
  */
-export const LOGIC_MODES = {
-  PATTERN_COMPLETION: 'pattern_completion',
-  SEQUENCE_REASONING: 'sequence_reasoning',
-  LOGICAL_RELATIONSHIPS: 'logical_relationships',
-  VISUAL_LOGIC: 'visual_logic',
-};
+
+export * from './logicConstants.js';
+export * from './logicGenerator.js';
+export * from './logicEvaluator.js';
+export * from './logicDifficulty.js';
+export * from './logicEngine.js';
+export { LogicEngine as default } from './logicEngine.js';

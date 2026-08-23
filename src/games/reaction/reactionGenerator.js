@@ -3,10 +3,10 @@
  * Procedural generation for Target Tap, Rapid Choice, and Direction Reaction.
  */
 
-import { REACTION_MODES } from './reactionConstants';
-import { generateTargetTapTask } from './targetTap/targetTapGenerator';
-import { generateRapidChoiceTask } from './rapidChoice/rapidChoiceGenerator';
-import { generateDirectionReactionTask } from './directionReaction/directionReactionGenerator';
+import { REACTION_MODES } from './reactionConstants.js';
+import { generateTargetTapTask } from './targetTap/targetTapGenerator.js';
+import { generateRapidChoiceTask } from './rapidChoice/rapidChoiceGenerator.js';
+import { generateDirectionReactionTask } from './directionReaction/directionReactionGenerator.js';
 
 /**
  * Generates an infinite procedural task for any Reaction mode.

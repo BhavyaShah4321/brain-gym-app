@@ -3,7 +3,7 @@
  * Evaluates stimulus-to-action mapping latency, false starts, and direction errors.
  */
 
-import { REACTION_MODES } from '../reactionConstants';
+import { REACTION_MODES } from '../reactionConstants.js';
 
 export function evaluateDirectionReactionResponse({
   task,

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "OVERLOAD",
-    "slug": "overload",
+    "slug": "bhavya",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,6 +21,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "99253b10-15dc-47da-90f6-b2e2ba3afb1d"
+      }
+    },
+    "owner": "bhavya7272s-team"
   }
 }
