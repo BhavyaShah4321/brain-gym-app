@@ -1,126 +1,294 @@
-# OVERLOAD — Mobile Cognitive Performance Platform
+# OVERLOAD
 
-**OVERLOAD** is a premium, local-first mobile cognitive training application built with **React Native and Expo (pure JavaScript)**. Designed with a luxury editorial aesthetic, OVERLOAD delivers 27 scientifically grounded, adaptive cognitive drills organized across 8 core cognitive faculties and a high-energy **Mind Rush** arcade suite.
+OVERLOAD is a premium, local-first cognitive training mobile app built with React Native and Expo. The project focuses on short-form brain-training sessions, performance tracking, and adaptive daily practice across multiple cognitive domains.
 
----
-
-## 🛠 Technology Stack
-
-- **Framework**: [React Native](https://reactnative.dev/) with [Expo](https://expo.dev/) (SDK 57)
-- **Language**: Pure JavaScript (`.js` only — strictly 0 TypeScript)
-- **Persistence**: Local-first offline storage via `@react-native-async-storage/async-storage`
-- **Navigation**: `@react-navigation/native`, `@react-navigation/native-stack`, and `@react-navigation/bottom-tabs`
-- **Design System**: Luxury editorial light theme (`#FAF8F5` canvas, `#FFFFFF` surfaces, `#1B2A4A` navy, `#C5A55A` gold, `#6B8F71` sage, `#10B981` emerald, `#EF4444` rose)
-- **Sensory & Haptics**: `expo-haptics` tactile micro-impulses
+The application is designed around a luxury editorial visual language, offline-first persistence, and a modular game system that includes nine training categories and a high-energy Mind Rush arcade experience.
 
 ---
 
-## 🧠 Cognitive Faculties & Game Modes (27 Total)
+## Project overview
 
-### 1. Working Memory (4 Modes)
-- **Sequence Recall**: Reconstruct sequential active positions across a 3x3 matrix.
-- **Grid Memory**: Retain simultaneous spatial coordinate layouts.
-- **Object Recall**: Feature recognition and target discrimination amidst visual distractors.
-- **Order Recall**: Temporal sequence reconstruction from shuffled items.
+This app delivers a structured cognitive training experience built for mobile users who want to improve:
 
-### 2. Focus & Attention (2 Modes)
-- **Target Search**: Rapid visual feature search under visual noise.
-- **Visual Tracking**: Continuous tracking of moving and swapping target tokens.
+- working memory
+- visual attention and focus
+- reaction speed
+- processing speed
+- decision quality under pressure
+- spatial reasoning
+- cognitive flexibility
+- logical reasoning
+- arcade-style rapid response performance
 
-### 3. Reaction Speed (3 Modes)
-- **Target Tap**: Millisecond visual onset detection and motor execution.
-- **Rapid Choice**: High-speed visual discrimination and choice selection.
-- **Direction Reaction**: Directional cue stimulus-to-motor translation.
-
-### 4. Processing Speed (3 Modes)
-- **Symbol Match**: High-speed comparison of dual symbol sets.
-- **Number Scan**: Fast numerical matrix search.
-- **Pattern Complete**: Sequence rule induction and missing terminal prediction.
-
-### 5. Decision Making (3 Modes)
-- **Priority Sort**: Multi-attribute task triage under deadlines, impact, and urgency.
-- **Best Choice**: Constrained multi-criteria optimization.
-- **Rule Switch**: Dynamic conditional decision rule adaptation.
-
-### 6. Spatial Reasoning (3 Modes)
-- **Mental Rotation**: Angular geometric orientation matching.
-- **Spatial Navigation**: Shortest-path navigation across grid labyrinths.
-- **Mirror Map**: Axis reflection and coordinate mapping.
-
-### 7. Cognitive Flexibility (3 Modes)
-- **Sort Shift**: Mental set shifting across changing visual dimensions.
-- **Pattern Shift**: Mid-sequence transformation detection and rule adaptation.
-- **Dual Rule**: Branching execution based on contextual flags.
-
-### 8. Logic & Reasoning (3 Modes)
-- **Deduction Grid**: Variable elimination and relationship deduction.
-- **Sequence Logic**: Mathematical sequence rule discovery.
-- **Constraint Solver**: Multi-constraint satisfaction.
-
-### 9. Mind Rush Arcade (3 Modes)
-- **Blast Logic**: Fast multi-rule target detonation.
-- **Chain Reaction**: Sequential network root planning and staggered propagation.
-- **Boss Breaker**: 5-phase cyber-boss shield combat.
+The system stores results locally on-device, tracks trends over time, and presents a simple readiness view for the user.
 
 ---
 
-## 🚀 Running the Application
+## Key features
 
-### 1. Install Dependencies
+- 9 training categories with adaptive drills
+- 27 cognitive game modes in total
+- local-only storage using AsyncStorage
+- premium light theme with custom UI components
+- haptic feedback for interaction and game events
+- splash, onboarding, home, training, progress, profile, settings flows
+- navigation via React Navigation
+- cognitive metrics such as streaks, readiness, accuracy, and index
+- offline-first behavior with no required login
+
+---
+
+## Tech stack
+
+- React Native
+- Expo
+- JavaScript only
+- React Navigation
+- AsyncStorage
+- Expo Haptics
+- Expo Linear Gradient
+- React Native Safe Area Context
+
+---
+
+## App flow
+
+The app is organized around a standard mobile journey:
+
+1. Splash screen
+2. Onboarding flow
+3. Main tabs
+   - Home
+   - Training
+   - Progress
+   - Profile
+4. Category detail screens
+5. Game screen / drill execution
+6. Results summary
+7. Local persistence of session data
+
+---
+
+## Cognitive categories included
+
+### 1. Working Memory
+- Sequence Recall
+- Grid Memory
+- Object Recall
+- Order Recall
+
+### 2. Focus & Attention
+- Target Search
+- Visual Tracking
+
+### 3. Reaction Speed
+- Target Tap
+- Rapid Choice
+- Direction Reaction
+
+### 4. Processing Speed
+- Symbol Match
+- Number Scan
+- Pattern Complete
+
+### 5. Decision Making
+- Priority Sort
+- Best Choice
+- Rule Switch
+
+### 6. Spatial Reasoning
+- Mental Rotation
+- Spatial Navigation
+- Mirror Map
+
+### 7. Cognitive Flexibility
+- Sort Shift
+- Pattern Shift
+- Dual Rule
+
+### 8. Logic & Reasoning
+- Deduction Grid
+- Sequence Logic
+- Constraint Solver
+
+### 9. Mind Rush Arcade
+- Blast Logic
+- Chain Reaction
+- Boss Breaker
+
+---
+
+## Repository structure
+
+```bash
+brain-gym-app/
+├── App.js
+├── app.json
+├── index.js
+├── package.json
+├── README.md
+├── LICENSE
+├── assets/
+├── docs/
+│   ├── FINAL_PRODUCT_ARCHITECTURE.md
+│   ├── PHASE_4_LOCAL_FIRST_ARCHITECTURE.md
+│   ├── PHASE_5_FOCUS_ENGINE.md
+│   ├── PHASE_5_VISUAL_TRACKING.md
+│   ├── PHASE_5_WORKING_MEMORY.md
+│   ├── PHASE_6_REACTION.md
+│   ├── PHASE_7_PROCESSING_SPEED.md
+│   ├── PHASE_8_DECISION_MAKING.md
+│   ├── PHASE_9_SPATIAL_REASONING.md
+│   ├── PHASE_10_COGNITIVE_FLEXIBILITY.md
+│   ├── PHASE_11_LOGIC_REASONING.md
+│   └── PHASE_12_MIND_RUSH.md
+├── scripts/
+├── src/
+│   ├── components/
+│   ├── constants/
+│   ├── context/
+│   ├── games/
+│   │   ├── decision/
+│   │   ├── flexibility/
+│   │   ├── focus/
+│   │   ├── logic/
+│   │   ├── memory/
+│   │   ├── mindRush/
+│   │   ├── processing/
+│   │   ├── reaction/
+│   │   └── spatial/
+│   ├── hooks/
+│   ├── navigation/
+│   ├── screens/
+│   ├── services/
+│   ├── theme/
+│   └── utils/
+└──
+```
+
+---
+
+## Main application entry points
+
+- `App.js` — root app entry point and provider setup
+- `src/navigation/AppNavigator.js` — navigation tree and screen registration
+- `src/navigation/AppTabs.js` — bottom tab navigation
+- `src/constants/categories.js` — training categories and mode definitions
+- `src/services/storageService.js` — local persistence layer
+- `src/screens/` — app screens and gameplay flows
+- `src/games/` — domain-specific cognitive game engine logic
+
+---
+
+## Local-first architecture
+
+The product is intentionally designed to work without cloud login or remote API dependency. User progress is stored locally on the device, including:
+
+- profile information
+- cognitive sessions
+- scores and accuracy
+- streak tracking
+- readiness measures
+- category-level performance records
+
+This keeps the app usable in offline scenarios and makes it straightforward to run as a private personal trainer experience.
+
+---
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Expo CLI
+- Android emulator or physical Android device, or iOS simulator
+
+### Install dependencies
+
 ```bash
 npm install
 ```
 
-### 2. Start Expo Development Server
+### Start the development server
+
 ```bash
 npm start
-# or
+```
+
+or
+
+```bash
 npx expo start
 ```
 
-### 3. Run on Android Device / Emulator
+### Run on Android
+
 ```bash
 npm run android
 ```
 
-### 4. Verify Android Build
+### Run on iOS
+
+```bash
+npm run ios
+```
+
+### Run in browser (web)
+
+```bash
+npm run web
+```
+
+### Export for Android preview build
+
 ```bash
 npx expo export --platform android --dev
 ```
 
 ---
 
-## 📂 Architecture Overview
+## Project status
 
-```
-brain-gym-app/
-├── App.js                      # Root application entry
-├── src/
-│   ├── components/             # Design system components
-│   ├── constants/              # Categories & route definitions
-│   ├── games/                  # 9 decoupled cognitive game engines
-│   │   ├── memory/             # Working Memory engine
-│   │   ├── focus/              # Focus & Attention engine
-│   │   ├── reaction/           # Reaction Speed engine
-│   │   ├── processing/         # Processing Speed engine
-│   │   ├── decision/           # Decision Making engine
-│   │   ├── spatial/            # Spatial Reasoning engine
-│   │   ├── flexibility/        # Cognitive Flexibility engine
-│   │   ├── logic/              # Logic & Reasoning engine
-│   │   └── mindRush/           # Mind Rush Arcade suite
-│   ├── navigation/             # AppNavigator & Bottom Tabs
-│   ├── screens/                # All application screens
-│   ├── services/               # storageService.js (AsyncStorage layer)
-│   ├── theme/                  # Colors, typography, spacing
-│   └── utils/                  # Haptics, performance metrics, streak
-└── docs/
-    └── FINAL_PRODUCT_ARCHITECTURE.md
-```
+This repository is a front-end mobile app project focused on gameplay, UX, and local cognitive-tracking flows. It is structured as an Expo-based app and is intended for further iteration, feature expansion, and polishing.
+
+The project currently includes the core app flow, category system, navigation, and multiple cognitive games, but does not appear to include an automated test suite or CI pipeline at this time.
 
 ---
 
-## 🔒 Local-First Privacy & Offline Operation
+## Documentation
 
-- OVERLOAD is **100% offline-first**.
-- All game sessions, telemetry, personal best scores, daily streaks, and cognitive indices are persisted securely on the device via `AsyncStorage`.
-- No mandatory login, account creation, or internet connection is required for normal gameplay.
+Additional project planning and architecture notes are available in the `docs/` folder, including:
+
+- `FINAL_PRODUCT_ARCHITECTURE.md`
+- phase-by-phase design documents for individual cognitive faculties and game systems
+
+These files are useful if you want to understand the design intent for each training module.
+
+---
+
+## Privacy and usage notes
+
+- No login is required for the core experience.
+- Data is stored locally on the device.
+- The app is suitable for personal training and offline practice.
+- Progress is meant to be self-contained and device-local, rather than cloud-synced.
+
+---
+
+## License
+
+This project includes a license file in the repository root. Please review the license before commercial use or redistribution.
+
+---
+
+## Suggested next improvements
+
+- add automated tests for navigation and core logic
+- add a proper CI pipeline
+- add analytics export or sync options
+- implement stronger game balance tuning and progression systems
+- add app store metadata and screenshots
+- expand accessibility and onboarding polish
+
+If you want, I can also help turn this into a more production-grade GitHub README with badges, screenshots placeholders, and a cleaner contributor section.
